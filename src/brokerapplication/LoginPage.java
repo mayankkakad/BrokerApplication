@@ -431,8 +431,6 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
        // TODO add your handling code here:
-       if(evt.getKeyChar()=='\n')
-           jButton1.doClick();
     }//GEN-LAST:event_jTextField1KeyPressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -476,8 +474,6 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jPasswordField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyPressed
       // TODO add your handling code here:
-      if(evt.getKeyChar()=='\n')
-          jButton1.doClick();
     }//GEN-LAST:event_jPasswordField1KeyPressed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -595,8 +591,6 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton5.doClick();
     }//GEN-LAST:event_jTextField2KeyPressed
 
     private void jDialog2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog2KeyPressed
@@ -613,8 +607,6 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton6.doClick();
     }//GEN-LAST:event_jTextField3KeyPressed
 
     private void jDialog3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog3KeyPressed
@@ -631,8 +623,6 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jPasswordField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField2KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton4.doClick();
     }//GEN-LAST:event_jPasswordField2KeyPressed
 
     /**

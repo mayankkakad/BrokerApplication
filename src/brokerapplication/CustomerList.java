@@ -5,6 +5,7 @@
  */
 package brokerapplication;
 
+import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,10 +13,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 /**
  *
@@ -27,6 +40,7 @@ public class CustomerList extends javax.swing.JFrame {
      * Creates new form CustomerList
      */
     int total,selected;
+    String myFileName;
     Vector<Seller> sellerlist;
     Vector<Buyer> buyerlist;
     JLabel sr_nos[];
@@ -61,7 +75,7 @@ public class CustomerList extends javax.swing.JFrame {
                     gbc.gridy=sellerlist.size()+buyerlist.size()+6;
                     gbc.insets=new Insets(20,0,50,0);
                     gbc.gridwidth=4;
-                    jPanel1.add(jButton1,gbc);
+                    jPanel1.add(jButton7,gbc);
                     jPanel1.revalidate();
                     jPanel1.repaint();
                 }
@@ -81,7 +95,7 @@ public class CustomerList extends javax.swing.JFrame {
                     gbc.gridy=sellerlist.size()+buyerlist.size()+6;
                     gbc.insets=new Insets(20,0,50,0);
                     gbc.gridwidth=4;
-                    jPanel1.add(jButton1,gbc);
+                    jPanel1.add(jButton7,gbc);
                     jPanel1.revalidate();
                     jPanel1.repaint();
                 }
@@ -101,7 +115,7 @@ public class CustomerList extends javax.swing.JFrame {
                     gbc.gridy=sellerlist.size()+buyerlist.size()+6;
                     gbc.insets=new Insets(20,0,50,0);
                     gbc.gridwidth=4;
-                    jPanel1.add(jButton1,gbc);
+                    jPanel1.add(jButton7,gbc);
                     jPanel1.revalidate();
                     jPanel1.repaint();
                 }
@@ -115,7 +129,7 @@ public class CustomerList extends javax.swing.JFrame {
         names=new JLabel[total];
         quantities=new JLabel[total];
         edits=new JButton[total];
-        jPanel1.remove(jButton1);
+        jPanel1.remove(jButton7);
         jPanel1.remove(jButton2);
         displaySellers();
         displayBuyers(35);
@@ -129,7 +143,7 @@ public class CustomerList extends javax.swing.JFrame {
         gbc.gridy=sellerlist.size()+buyerlist.size()+6;
         gbc.insets=new Insets(20,0,50,0);
         gbc.gridwidth=4;
-        jPanel1.add(jButton1,gbc);
+        jPanel1.add(jButton7,gbc);
         jPanel1.revalidate();
         jPanel1.repaint();
         
@@ -322,7 +336,7 @@ public class CustomerList extends javax.swing.JFrame {
             jPanel1.remove(quantities[i]);
             jPanel1.remove(edits[i]);
         }
-        jPanel1.remove(jButton1);
+        jPanel1.remove(jButton7);
     }
 
     /**
@@ -353,6 +367,9 @@ public class CustomerList extends javax.swing.JFrame {
         jDialog3 = new javax.swing.JDialog();
         jLabel12 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
+        jDialog4 = new javax.swing.JDialog();
+        jLabel14 = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -364,9 +381,16 @@ public class CustomerList extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
         jDialog1.setTitle("Edit Customer");
         jDialog1.setSize(new java.awt.Dimension(1000, 700));
+        jDialog1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jDialog1KeyPressed(evt);
+            }
+        });
         jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -437,6 +461,11 @@ public class CustomerList extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        jButton3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton3KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -469,6 +498,11 @@ public class CustomerList extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        jButton4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton4KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -478,6 +512,11 @@ public class CustomerList extends javax.swing.JFrame {
 
         jDialog2.setTitle("Confirmation");
         jDialog2.setSize(new java.awt.Dimension(600, 300));
+        jDialog2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jDialog2KeyPressed(evt);
+            }
+        });
         jDialog2.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -491,6 +530,11 @@ public class CustomerList extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
+        jButton5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton5KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -499,6 +543,11 @@ public class CustomerList extends javax.swing.JFrame {
 
         jDialog3.setTitle("Confirmation");
         jDialog3.setSize(new java.awt.Dimension(600, 300));
+        jDialog3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jDialog3KeyPressed(evt);
+            }
+        });
         jDialog3.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -512,11 +561,48 @@ public class CustomerList extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
+        jButton6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton6KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(60, 0, 0, 0);
         jDialog3.getContentPane().add(jButton6, gridBagConstraints);
+
+        jDialog4.setTitle("Print?");
+        jDialog4.setSize(new java.awt.Dimension(400, 300));
+        jDialog4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jDialog4KeyPressed(evt);
+            }
+        });
+        jDialog4.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jLabel14.setText("File Saved. Print?");
+        jLabel14.setToolTipText("");
+        jDialog4.getContentPane().add(jLabel14, new java.awt.GridBagConstraints());
+
+        jButton9.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jButton9.setText("Yes");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        jButton9.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton9KeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 0);
+        jDialog4.getContentPane().add(jButton9, gridBagConstraints);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Customers List");
@@ -604,10 +690,9 @@ public class CustomerList extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 80, 0);
         jPanel1.add(jButton1, gridBagConstraints);
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -640,17 +725,54 @@ public class CustomerList extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 50, 0);
         jPanel1.add(jLabel13, gridBagConstraints);
 
+        jButton7.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jButton7.setText("Back");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        jButton7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton7KeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        jPanel1.add(jButton7, gridBagConstraints);
+
+        jButton8.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jButton8.setText("Print");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jButton8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton8KeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 80, 0);
+        jPanel1.add(jButton8, gridBagConstraints);
+
         jScrollPane1.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1158, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1148, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
         );
 
         pack();
@@ -680,8 +802,125 @@ public class CustomerList extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        try
+        {
+            String filename;
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyy%20HH%20mm%20ss");  
+            LocalDateTime now = LocalDateTime.now();
+            String datetime=dtf.format(now);
+            if(jComboBox1.getSelectedIndex()==0)
+            {
+                JOptionPane.showMessageDialog(null,"Select Seller or Buyer, not All","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                jComboBox1.requestFocus();
+                return;
+            }
+            else if(jComboBox1.getSelectedIndex()==1)
+            {
+                File file=new File("SellerLists");
+                file.mkdir();
+                filename="SellerLists\\SellerList"+datetime+".docx";
+            }
+            else
+            {
+                File file=new File("BuyerLists");
+                file.mkdir();
+                filename="BuyerLists\\BuyerList"+datetime+".docx";
+            }
+            XWPFDocument doc=new XWPFDocument();
+            FileOutputStream fos=new FileOutputStream(new File(filename));
+            XWPFParagraph para1=doc.createParagraph();
+            para1.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun para1run1=para1.createRun();
+            para1run1.setBold(true);
+            para1run1.setFontFamily("Calibri");
+            para1run1.setFontSize(18);
+            para1run1.setText(LoginPage.datop.getName(LoginPage.loggedInUser).toUpperCase());
+            para1run1.addBreak();
+            XWPFRun para1run2=para1.createRun();
+            para1run2.setBold(true);
+            para1run2.setFontFamily("Calibri");
+            para1run2.setFontSize(16);
+            para1run2.setText(jComboBox1.getSelectedItem().toString().substring(0,jComboBox1.getSelectedItem().toString().length()-1)+" wise List");
+            XWPFTable table=doc.createTable();
+            XWPFTableRow row1=table.getRow(0);
+            row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
+            row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(7200));
+            row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
+            XWPFRun rowcell[]=new XWPFRun[3];
+            for(int i=0;i<rowcell.length;i++)
+            {
+                row1.getCell(i).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                row1.getCell(i).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                rowcell[i]=row1.getCell(i).getParagraphs().get(0).createRun();
+                rowcell[i].setBold(true);
+                rowcell[i].setFontFamily("Calibri");
+                rowcell[i].setFontSize(14);
+            }
+            rowcell[0].setText("Sr No.");
+            if(jComboBox1.getSelectedIndex()==1)
+                rowcell[1].setText("Seller");
+            else
+                rowcell[1].setText("Buyer");
+            rowcell[2].setText("Qty Total");
+            if(jComboBox1.getSelectedIndex()==1)
+            {
+                for(int i=0;i<sellerlist.size();i++)
+                {
+                    XWPFTableRow rowi=table.createRow();
+                    XWPFRun rowcelli[]=new XWPFRun[3];
+                    for(int j=0;j<rowcell.length;j++)
+                    {
+                        rowi.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                        if(j==1)
+                            rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                        else
+                            rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                        rowcelli[j]=rowi.getCell(j).getParagraphs().get(0).createRun();
+                        rowcelli[j].setFontFamily("Calibri");
+                        rowcelli[j].setFontSize(14);
+                    }
+                    rowcelli[0].setText(Integer.toString(i+1));
+                    rowcelli[1].setText(sellerlist.get(i).code+"- "+sellerlist.get(i).name);
+                    rowcelli[2].setText(Integer.toString(sellerlist.get(i).quantity));
+                }
+            }
+            else
+            {
+                for(int i=0;i<buyerlist.size();i++)
+                {
+                    XWPFTableRow rowi=table.createRow();
+                    XWPFRun rowcelli[]=new XWPFRun[3];
+                    for(int j=0;j<rowcell.length;j++)
+                    {
+                        rowi.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                        if(j==1)
+                            rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                        else
+                            rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                        rowcelli[j]=rowi.getCell(j).getParagraphs().get(0).createRun();
+                        rowcelli[j].setFontFamily("Calibri");
+                        rowcelli[j].setFontSize(14);
+                    }
+                    rowcelli[0].setText(Integer.toString(i+1));
+                    rowcelli[1].setText(buyerlist.get(i).code+"- "+buyerlist.get(i).name);
+                    rowcelli[2].setText(Integer.toString(buyerlist.get(i).quantity));
+                }
+            }
+            doc.write(fos);
+            fos.close();
+            askPrint(filename);
+        }
+        catch(Exception e){e.printStackTrace();}
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    public void askPrint(String filename)
+    {
+        myFileName=filename;
+        int xco=(LoginPage.hp.getWidth()-jDialog4.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog4.getHeight())/2;
+        jDialog4.setBounds(xco,yco,jDialog4.getWidth(),jDialog4.getHeight());
+        jDialog4.setVisible(true);
+    }
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
@@ -759,6 +998,92 @@ public class CustomerList extends javax.swing.JFrame {
         jComboBox1.setSelectedIndex(temp);
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        LoginPage.hp.setVisible(true);
+        HomePage.cl.setVisible(false);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton7KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton7.doClick();
+    }//GEN-LAST:event_jButton7KeyPressed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        jButton2.doClick();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton8KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton8KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton8.doClick();
+    }//GEN-LAST:event_jButton8KeyPressed
+
+    private void jButton3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton3KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton3.doClick();
+    }//GEN-LAST:event_jButton3KeyPressed
+
+    private void jDialog1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog1KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton3.doClick();
+    }//GEN-LAST:event_jDialog1KeyPressed
+
+    private void jButton4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton4KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton4.doClick();
+    }//GEN-LAST:event_jButton4KeyPressed
+
+    private void jButton5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton5KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton5.doClick();
+    }//GEN-LAST:event_jButton5KeyPressed
+
+    private void jDialog2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog2KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton5.doClick();
+    }//GEN-LAST:event_jDialog2KeyPressed
+
+    private void jButton6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton6KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton6.doClick();
+    }//GEN-LAST:event_jButton6KeyPressed
+
+    private void jDialog3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog3KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton6.doClick();
+    }//GEN-LAST:event_jDialog3KeyPressed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            Desktop.getDesktop().print(new File(myFileName));
+        }
+        catch(Exception e){}
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton9KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton9KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton9.doClick();
+    }//GEN-LAST:event_jButton9KeyPressed
+
+    private void jDialog4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog4KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton9.doClick();
+    }//GEN-LAST:event_jDialog4KeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -801,16 +1126,21 @@ public class CustomerList extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
     private javax.swing.JDialog jDialog3;
+    private javax.swing.JDialog jDialog4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

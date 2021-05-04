@@ -317,32 +317,22 @@ public class SignUp extends javax.swing.JFrame {
 
     private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
     }//GEN-LAST:event_jTextField2KeyPressed
 
     private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
     }//GEN-LAST:event_jTextField3KeyPressed
 
     private void jPasswordField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
     }//GEN-LAST:event_jPasswordField1KeyPressed
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
     }//GEN-LAST:event_jTextField1KeyPressed
 
     private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
     }//GEN-LAST:event_jTextField4KeyPressed
 
     /**

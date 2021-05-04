@@ -188,9 +188,15 @@ public class AddEntry extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
+        jButton6 = new javax.swing.JButton();
 
         jDialog1.setTitle("Confirmation");
         jDialog1.setSize(new java.awt.Dimension(400, 300));
+        jDialog1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jDialog1KeyPressed(evt);
+            }
+        });
         jDialog1.getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
@@ -204,6 +210,11 @@ public class AddEntry extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
+        jButton5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton5KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -215,6 +226,11 @@ public class AddEntry extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Add Entry");
 
+        jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPanel1KeyPressed(evt);
+            }
+        });
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
@@ -334,6 +350,11 @@ public class AddEntry extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        jButton3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton3KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
@@ -345,6 +366,11 @@ public class AddEntry extends javax.swing.JFrame {
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
+            }
+        });
+        jButton4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton4KeyPressed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -400,6 +426,11 @@ public class AddEntry extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -414,11 +445,15 @@ public class AddEntry extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        jButton2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton2KeyPressed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 6;
-        gridBagConstraints.insets = new java.awt.Insets(30, 0, 50, 0);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 0);
         jPanel1.add(jButton2, gridBagConstraints);
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -469,6 +504,25 @@ public class AddEntry extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 100, 0);
         jPanel1.add(jLabel13, gridBagConstraints);
 
+        jButton6.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jButton6.setText("Back");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jButton6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton6KeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 50, 0);
+        jPanel1.add(jButton6, gridBagConstraints);
+
         jScrollPane1.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -491,7 +545,7 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.remove(jButton3);
         jPanel1.remove(jButton4);
         jPanel1.remove(jButton1);
-        jPanel1.remove(jButton2);
+        jPanel1.remove(jButton6);
         GridBagConstraints gbc=new GridBagConstraints();
         partcodelabel[ind]=new JLabel();
         partcodelabel[ind].setFont(new java.awt.Font("Tahoma",0,18));
@@ -648,14 +702,14 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(jButton4,gbc);
         gbc.gridx=0;
         gbc.gridy=ind+ind+10;
-        gbc.gridwidth=4;
+        gbc.gridwidth=6;
         gbc.insets=new Insets(80,0,0,0);
         jPanel1.add(jButton1,gbc);
         gbc.gridx=0;
         gbc.gridy=ind+ind+11;
-        gbc.gridwidth=4;
+        gbc.gridwidth=6;
         gbc.insets=new Insets(30,0,50,0);
-        jPanel1.add(jButton2,gbc);
+        jPanel1.add(jButton6,gbc);
         ind++;
         if(ind==max_parts)
             jButton3.setVisible(false);
@@ -672,7 +726,7 @@ public class AddEntry extends javax.swing.JFrame {
         jButton3.setVisible(true);
         ind--;
         jPanel1.remove(jButton1);
-        jPanel1.remove(jButton2);
+        jPanel1.remove(jButton6);
         jPanel1.remove(jButton3);
         jPanel1.remove(jButton4);
         jPanel1.remove(partcodelabel[ind]);
@@ -698,14 +752,14 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(jButton4,gbc);
         gbc.gridx=0;
         gbc.gridy=ind+ind+10;
-        gbc.gridwidth=4;
+        gbc.gridwidth=6;
         gbc.insets=new Insets(80,0,0,0);
         jPanel1.add(jButton1,gbc);
         gbc.gridx=0;
         gbc.gridy=ind+ind+11;
-        gbc.gridwidth=4;
+        gbc.gridwidth=6;
         gbc.insets=new Insets(30,0,50,0);
-        jPanel1.add(jButton2,gbc);
+        jPanel1.add(jButton6,gbc);
         ind++;
         if(ind==0)
             jButton4.setVisible(false);
@@ -913,6 +967,60 @@ public class AddEntry extends javax.swing.JFrame {
         HomePage.ae.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        LoginPage.hp.setVisible(true);
+        HomePage.ae.setVisible(false);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton2KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton2.doClick();
+    }//GEN-LAST:event_jButton2KeyPressed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton1.doClick();
+    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void jButton6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton6KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton6.doClick();
+    }//GEN-LAST:event_jButton6KeyPressed
+
+    private void jButton3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton3KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton3.doClick();
+    }//GEN-LAST:event_jButton3KeyPressed
+
+    private void jButton4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton4KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton4.doClick();
+    }//GEN-LAST:event_jButton4KeyPressed
+
+    private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton1.doClick();
+    }//GEN-LAST:event_jPanel1KeyPressed
+
+    private void jButton5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton5KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton5.doClick();
+    }//GEN-LAST:event_jButton5KeyPressed
+
+    private void jDialog1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog1KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton5.doClick();
+    }//GEN-LAST:event_jDialog1KeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -954,6 +1062,7 @@ public class AddEntry extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;

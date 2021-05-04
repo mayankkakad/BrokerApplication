@@ -291,7 +291,7 @@ public class DatabaseOperations {
         int total=0;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        time=dtf.format(now);
+        time=dtf.format(now).substring(0,5);
         try
         {
             if(mainseller.code.equals(""))
@@ -344,7 +344,7 @@ public class DatabaseOperations {
         int total=0;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        time=dtf.format(now);
+        time=dtf.format(now).substring(0,5);
         try
         {
             if(mainbuyer.code.equals(""))
@@ -382,7 +382,7 @@ public class DatabaseOperations {
                 st=conn.createStatement();
                 st.executeUpdate("insert into `transactions` values(\""+date+"\",\""+time+"\",\""+LoginPage.loggedInUser+"\",\""+scode+"\",\""+finalsellerlist.get(i).name+"\",\""+bcode+"\",\""+mainbuyer.name+"\",\""+items.get(i)+"\",\""+finalsellerlist.get(i).quantity+"\","+Integer.parseInt(rate.get(i))+");");
                 st=conn.createStatement();
-                st.executeUpdate("update `sellerdata` set `quantity`=`quantity`+"+finalsellerlist.get(i).quantity+" where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code`=\""+bcode+"\" and `seller_name`=\""+finalsellerlist.get(i).name+"\";");
+                st.executeUpdate("update `sellerdata` set `quantity`=`quantity`+"+finalsellerlist.get(i).quantity+" where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code`=\""+scode+"\" and `seller_name`=\""+finalsellerlist.get(i).name+"\";");
                 total=total+finalsellerlist.get(i).quantity;
             }
             st=conn.createStatement();
@@ -390,5 +390,173 @@ public class DatabaseOperations {
         }
         catch(Exception e){
         e.printStackTrace();}
+    }
+    public Vector<String> getDates()
+    {
+        Vector<String> dates=new Vector<String>();
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select distinct `date` from `transactions` where `username`=\""+LoginPage.loggedInUser+"\";");
+            while(rs.next())
+                dates.add(rs.getString("date"));
+        }
+        catch(Exception e){}
+        return dates;
+    }
+    public Vector<Transaction> getTransactions(String date)
+    {
+        Vector<Transaction> transactions=new Vector<Transaction>();
+        try
+        {
+            st=conn.createStatement();
+            if(date.equals("all"))
+            {
+                rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\";");
+                while(rs.next())
+                    transactions.add(new Transaction(rs.getString("date"),rs.getString("time"),rs.getString("seller_code"),rs.getString("seller_name"),rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getString("item"),rs.getInt("quantity"),rs.getInt("rate")));
+            }
+            else
+            {
+                rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `date`=\""+date+"\";");
+                while(rs.next())
+                    transactions.add(new Transaction(rs.getString("date"),rs.getString("time"),rs.getString("seller_code"),rs.getString("seller_name"),rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getString("item"),rs.getInt("quantity"),rs.getInt("rate")));
+            }
+        }
+        catch(Exception e){}
+        return transactions;
+    }
+    public void deleteTransactions()
+    {
+        try
+        {
+            st=conn.createStatement();
+            st.executeUpdate("delete from `transactions` where `username`=\""+LoginPage.loggedInUser+"\";");
+            st=conn.createStatement();
+            st.executeUpdate("update `buyerdata` set `quantity`=0 where `username`=\""+LoginPage.loggedInUser+"\";");
+            st=conn.createStatement();
+            st.executeUpdate("update `sellerdata` set `quantity`=0 where `username`=\""+LoginPage.loggedInUser+"\";");
+        }
+        catch(Exception e){}
+    }
+    public void deleteParticularTransaction(Transaction t)
+    {
+        try
+        {
+            st=conn.createStatement();
+            st.executeUpdate("delete from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `date`=\""+t.date+"\" and `time`=\""+t.time+"\" and `seller_code`=\""+t.seller_code+"\" and `seller_name`=\""+t.seller_name+"\" and `buyer_code`=\""+t.buyer_code+"\" and `buyer_name`=\""+t.buyer_name+"\" and `item`=\""+t.item+"\" and `quantity`="+t.quantity+" and `rate`="+t.rate+";");
+            st=conn.createStatement();
+            st.executeUpdate("update `buyerdata` set `quantity`=`quantity`-"+t.quantity+" where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_code`=\""+t.buyer_code+"\" and `buyer_name`=\""+t.buyer_name+"\";");
+            st=conn.createStatement();
+            st.executeUpdate("update `sellerdata` set `quantity`=`quantity`-"+t.quantity+" where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code`=\""+t.seller_code+"\" and `seller_name`=\""+t.seller_name+"\";");
+        }
+        catch(Exception e){}
+    }
+    public void updateTransaction(Transaction t,String date,String time,String item,int quantity,int rate)
+    {
+        try
+        {
+            st=conn.createStatement();
+            st.executeUpdate("update `transactions` set `date`=\""+date+"\",`time`=\""+time+"\",`item`=\""+item+"\",`quantity`="+quantity+",`rate`="+rate+" where `username`=\""+LoginPage.loggedInUser+"\" and `date`=\""+t.date+"\" and `time`=\""+t.time+"\" and `seller_code`=\""+t.seller_code+"\" and `seller_name`=\""+t.seller_name+"\" and `buyer_code`=\""+t.buyer_code+"\" and `buyer_name`=\""+t.buyer_name+"\" and `item`=\""+t.item+"\" and `quantity`="+t.quantity+" and `rate`="+t.rate+";");
+            int change=quantity-t.quantity;
+            st=conn.createStatement();
+            st.executeUpdate("update `buyerdata` set `quantity`=`quantity`+"+change+" where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_code`=\""+t.buyer_code+"\" and `buyer_name`=\""+t.buyer_name+"\";");
+            st=conn.createStatement();
+            st.executeUpdate("update `sellerdata` set `quantity`=`quantity`+"+change+" where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code`=\""+t.seller_code+"\" and `seller_name`=\""+t.seller_name+"\";");
+        }
+        catch(Exception e){
+        e.printStackTrace();}
+    }
+    public Vector<Transaction> getSellerWiseTransactions(String seller_code,String seller_name)
+    {
+        Vector<Transaction> transactions=new Vector<Transaction>();
+        String scode;
+        try
+        {
+            if(seller_code.equals(""))
+            {
+                st=conn.createStatement();
+                rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_name`=\""+seller_name+"\";");
+                rs.next();
+                scode=rs.getString("seller_code");
+            }
+            else
+            {
+                String text="%"+seller_code+"%";
+                st=conn.createStatement();
+                rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_name`=\""+seller_name+"\" and `seller_code` like \'"+text+"\';");
+                rs.next();
+                scode=rs.getString("seller_code");
+            }
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code`=\""+scode+"\" and `seller_name`=\""+seller_name+"\";");
+            while(rs.next())
+                transactions.add(new Transaction(rs.getString("date"),rs.getString("time"),rs.getString("seller_code"),rs.getString("seller_name"),rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getString("item"),rs.getInt("quantity"),rs.getInt("rate")));
+        }
+        catch(Exception e){
+        e.printStackTrace();}
+        return transactions;
+    }
+    public Vector<Transaction> getBuyerWiseTransactions(String buyer_code,String buyer_name)
+    {
+        Vector<Transaction> transactions=new Vector<Transaction>();
+        String bcode;
+        try
+        {
+            if(buyer_code.equals(""))
+            {
+                st=conn.createStatement();
+                rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_name`=\""+buyer_name+"\";");
+                rs.next();
+                bcode=rs.getString("buyer_code");
+            }
+            else
+            {
+                String text="%"+buyer_code+"%";
+                st=conn.createStatement();
+                rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_name`=\""+buyer_name+"\" and `buyer_code` like \'"+text+"\';");
+                rs.next();
+                bcode=rs.getString("buyer_code");
+            }
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_code`=\""+bcode+"\" and `buyer_name`=\""+buyer_name+"\";");
+            while(rs.next())
+                transactions.add(new Transaction(rs.getString("date"),rs.getString("time"),rs.getString("seller_code"),rs.getString("seller_name"),rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getString("item"),rs.getInt("quantity"),rs.getInt("rate")));
+        }
+        catch(Exception e){
+        e.printStackTrace();}
+        return transactions;
+    }
+    public void billFormat(String left,String right,String broker_name,String broker_address,String bill_title,String bill_period)
+    {
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `billformat` where `username`=\""+LoginPage.loggedInUser+"\";");
+            if(rs.next())
+            {
+                st=conn.createStatement();
+                st.executeUpdate("update `billformat` set `left`=\""+left+"\",`right`=\""+right+"\",`broker_name`=\""+broker_name+"\",`broker_address`=\""+broker_address+"\",`bill_title`=\""+bill_title+"\",`bill_period`=\""+bill_period+"\" where `username`=\""+LoginPage.loggedInUser+"\";");
+            }
+            else
+            {
+                st=conn.createStatement();
+                st.executeUpdate("insert into `billformat` values(\""+LoginPage.loggedInUser+"\",\""+left+"\",\""+right+"\",\""+broker_name+"\",\""+broker_address+"\",\""+bill_title+"\",\""+bill_period+"\");");
+            }
+        }
+        catch(Exception e){}
+    }
+    public Bill getBillFormat()
+    {
+        Bill b=null;
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `billformat` where `username`=\""+LoginPage.loggedInUser+"\";");
+            if(rs.next())
+                b=new Bill(rs.getString("left"),rs.getString("right"),rs.getString("broker_name"),rs.getString("broker_address"),rs.getString("bill_title"),rs.getString("bill_period"));
+        }
+        catch(Exception e){}
+        return b;
     }
 }
