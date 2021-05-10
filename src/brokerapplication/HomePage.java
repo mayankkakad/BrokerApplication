@@ -36,6 +36,7 @@ public class HomePage extends javax.swing.JFrame {
     static BrokerHistory bh;
     static CustomerHistory ch;
     static BillFormat bf;
+    static ItemsList il;
     public HomePage() {
         initComponents();
         String name=LoginPage.datop.getName(LoginPage.loggedInUser);
@@ -55,6 +56,9 @@ public class HomePage extends javax.swing.JFrame {
         jDialog1 = new javax.swing.JDialog();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        jDialog2 = new javax.swing.JDialog();
+        jLabel1 = new javax.swing.JLabel();
+        jButton12 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -64,6 +68,7 @@ public class HomePage extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
 
         jDialog1.setTitle("Brokerage Bill");
         jDialog1.setSize(new java.awt.Dimension(400, 300));
@@ -101,13 +106,39 @@ public class HomePage extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 0);
         jDialog1.getContentPane().add(jButton10, gridBagConstraints);
 
+        jDialog2.setTitle("Files Saved");
+        jDialog2.setSize(new java.awt.Dimension(400, 300));
+        jDialog2.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 40)); // NOI18N
+        jLabel1.setText("Files Saved");
+        jDialog2.getContentPane().add(jLabel1, new java.awt.GridBagConstraints());
+
+        jButton12.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jButton12.setText("OK");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+        jButton12.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton12KeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 0);
+        jDialog2.getContentPane().add(jButton12, gridBagConstraints);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Home Page");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jButton1.setText("Add Entry");
-        jButton1.setPreferredSize(new java.awt.Dimension(350, 80));
+        jButton1.setPreferredSize(new java.awt.Dimension(350, 75));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -126,7 +157,7 @@ public class HomePage extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jButton2.setText("Customer History");
-        jButton2.setPreferredSize(new java.awt.Dimension(350, 80));
+        jButton2.setPreferredSize(new java.awt.Dimension(350, 75));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -145,7 +176,7 @@ public class HomePage extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jButton3.setLabel("Add Customer");
-        jButton3.setPreferredSize(new java.awt.Dimension(350, 80));
+        jButton3.setPreferredSize(new java.awt.Dimension(350, 75));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -164,7 +195,7 @@ public class HomePage extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jButton4.setText("Broker History");
-        jButton4.setPreferredSize(new java.awt.Dimension(350, 80));
+        jButton4.setPreferredSize(new java.awt.Dimension(350, 75));
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -215,7 +246,7 @@ public class HomePage extends javax.swing.JFrame {
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jButton6.setText("Bill Format");
         jButton6.setToolTipText("");
-        jButton6.setPreferredSize(new java.awt.Dimension(350, 80));
+        jButton6.setPreferredSize(new java.awt.Dimension(350, 75));
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -234,7 +265,7 @@ public class HomePage extends javax.swing.JFrame {
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jButton7.setText("Customer List");
-        jButton7.setPreferredSize(new java.awt.Dimension(350, 80));
+        jButton7.setPreferredSize(new java.awt.Dimension(350, 75));
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -252,8 +283,8 @@ public class HomePage extends javax.swing.JFrame {
         getContentPane().add(jButton7, gridBagConstraints);
 
         jButton8.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jButton8.setText("Brockerage Bill");
-        jButton8.setPreferredSize(new java.awt.Dimension(300, 75));
+        jButton8.setText("Brokerage Bill");
+        jButton8.setPreferredSize(new java.awt.Dimension(350, 75));
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
@@ -265,11 +296,29 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(30, 30, 0, 0);
+        getContentPane().add(jButton8, gridBagConstraints);
+
+        jButton11.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jButton11.setText("Items List");
+        jButton11.setPreferredSize(new java.awt.Dimension(350, 75));
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+        jButton11.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton11KeyPressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 0);
-        getContentPane().add(jButton8, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 30);
+        getContentPane().add(jButton11, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -286,6 +335,7 @@ public class HomePage extends javax.swing.JFrame {
         // TODO add your handling code here:
         LoginPage.loggedIn=false;
         LoginPage.loggedInUser=null;
+        //try{LoginPage.datop.conn.close();}catch(Exception e){}
         LoginPage.lp.refresh();
         try
         {
@@ -394,10 +444,10 @@ public class HomePage extends javax.swing.JFrame {
         try
         {
             Vector<Seller> sellerlist=LoginPage.datop.getSellerList();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyy%20HH%20mm%20ss");  
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
             LocalDateTime now = LocalDateTime.now();
             String datetime=dtf.format(now);
-            File file=new File("SellerwiseBrokerageBills");
+            File file=new File(LoginPage.loggedInUser+" Sellerwise Brokerage Bills");
             file.mkdir();
             Bill b=LoginPage.datop.getBillFormat();
             if(b==null)
@@ -410,7 +460,7 @@ public class HomePage extends javax.swing.JFrame {
             for(int i=0;i<sellerlist.size();i++)
             {
                 Vector<Transaction> temp;
-                String filename="SellerwiseBrokerageBills\\"+sellerlist.get(i).name+datetime+".docx";
+                String filename=LoginPage.loggedInUser+" Sellerwise Brokerage Bills\\"+sellerlist.get(i).name+" "+datetime+".docx";
                 XWPFDocument doc=new XWPFDocument();
                 FileOutputStream fos=new FileOutputStream(new File(filename));
                 XWPFParagraph para1=doc.createParagraph();
@@ -468,7 +518,13 @@ public class HomePage extends javax.swing.JFrame {
                 myRun.setFontFamily("Calibri");
                 myRun.setFontSize(12);
                 myRun.setBold(true);
-                myRun.setText("SELLER\t"+temp.get(0).seller_code+"- "+temp.get(0).seller_name);
+                myRun.setText("SELLER:\t"+temp.get(0).seller_name);
+                myRun.addBreak();
+                XWPFRun mySecondRun=sellerName.createRun();
+                mySecondRun.setFontFamily("Calibri");
+                mySecondRun.setFontSize(12);
+                mySecondRun.setBold(true);
+                mySecondRun.setText(LoginPage.datop.getSellerPlace(temp.get(0).seller_code,temp.get(0).seller_name));
                 XWPFTable table=doc.createTable();
                 XWPFTableRow row1=table.getRow(0);
                 row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
@@ -507,11 +563,30 @@ public class HomePage extends javax.swing.JFrame {
                         rowcellj[k].setFontSize(12);
                     }
                     rowcellj[0].setText(temp.get(j).date);
-                    rowcellj[1].setText(temp.get(j).buyer_code+"- "+temp.get(j).buyer_name);
+                    rowcellj[1].setText(temp.get(j).buyer_name);
                     rowcellj[2].setText(temp.get(j).item);
                     rowcellj[3].setText(Integer.toString(temp.get(j).quantity));
                     rowcellj[4].setText(Integer.toString(temp.get(j).rate));
                 }
+                XWPFTableRow lastRow=table.createRow();
+                XWPFRun lastrowcells[]=new XWPFRun[5];
+                for(int k=0;k<lastrowcells.length;k++)
+                {
+                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells[k].setFontFamily("Calibri");
+                    lastrowcells[k].setFontSize(12);
+                }
+                lastrowcells[1].setBold(true);
+                lastrowcells[1].setText(temp.get(0).seller_name+" Total");
+                lastrowcells[3].setBold(true);
+                lastrowcells[3].setText(getTotalQuantity(temp));
+                //lastrowcells[4].setBold(true);
+                //lastrowcells[4].setText(getTotalRate(temp));
                 doc.write(fos);
                 fos.close();
             }
@@ -519,17 +594,35 @@ public class HomePage extends javax.swing.JFrame {
         catch(Exception e){
         e.printStackTrace();}
         jDialog1.setVisible(false);
+        int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog2.getHeight())/2;
+        jDialog2.setBounds(xco,yco,jDialog2.getWidth(),jDialog2.getHeight());
+        jDialog2.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    public String getTotalQuantity(Vector<Transaction> temp)
+    {
+        int total=0;
+        for(int i=0;i<temp.size();i++)
+            total+=temp.get(i).quantity;
+        return Integer.toString(total);
+    }
+    public String getTotalRate(Vector<Transaction> temp)
+    {
+        int total=0;
+        for(int i=0;i<temp.size();i++)
+            total+=temp.get(i).rate;
+        return Integer.toString(total);
+    }
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
         try
         {
             Vector<Buyer> buyerlist=LoginPage.datop.getBuyerList();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyy%20HH%20mm%20ss");  
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
             LocalDateTime now = LocalDateTime.now();
             String datetime=dtf.format(now);
-            File file=new File("BuyerwiseBrokerageBills");
+            File file=new File(LoginPage.loggedInUser+" Buyerwise Brokerage Bills");
             file.mkdir();
             Bill b=LoginPage.datop.getBillFormat();
             if(b==null)
@@ -542,7 +635,7 @@ public class HomePage extends javax.swing.JFrame {
             for(int i=0;i<buyerlist.size();i++)
             {
                 Vector<Transaction> temp;
-                String filename="BuyerwiseBrokerageBills\\"+buyerlist.get(i).name+datetime+".docx";
+                String filename=LoginPage.loggedInUser+" Buyerwise Brokerage Bills\\"+buyerlist.get(i).name+" "+datetime+".docx";
                 XWPFDocument doc=new XWPFDocument();
                 FileOutputStream fos=new FileOutputStream(new File(filename));
                 XWPFParagraph para1=doc.createParagraph();
@@ -600,7 +693,13 @@ public class HomePage extends javax.swing.JFrame {
                 myRun.setFontFamily("Calibri");
                 myRun.setFontSize(12);
                 myRun.setBold(true);
-                myRun.setText("BUYER\t"+temp.get(0).buyer_code+"- "+temp.get(0).buyer_name);
+                myRun.setText("BUYER:\t"+temp.get(0).buyer_name);
+                myRun.addBreak();
+                XWPFRun mySecondRun=buyerName.createRun();
+                mySecondRun.setFontFamily("Calibri");
+                mySecondRun.setFontSize(12);
+                mySecondRun.setBold(true);
+                mySecondRun.setText(LoginPage.datop.getBuyerPlace(temp.get(0).buyer_code,temp.get(0).buyer_name));
                 XWPFTable table=doc.createTable();
                 XWPFTableRow row1=table.getRow(0);
                 row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
@@ -639,17 +738,41 @@ public class HomePage extends javax.swing.JFrame {
                         rowcellj[k].setFontSize(12);
                     }
                     rowcellj[0].setText(temp.get(j).date);
-                    rowcellj[1].setText(temp.get(j).seller_code+"- "+temp.get(j).seller_name);
+                    rowcellj[1].setText(temp.get(j).seller_name);
                     rowcellj[2].setText(temp.get(j).item);
                     rowcellj[3].setText(Integer.toString(temp.get(j).quantity));
                     rowcellj[4].setText(Integer.toString(temp.get(j).rate));
                 }
+                XWPFTableRow lastRow=table.createRow();
+                XWPFRun lastrowcells[]=new XWPFRun[5];
+                for(int k=0;k<lastrowcells.length;k++)
+                {
+                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells[k].setFontFamily("Calibri");
+                    lastrowcells[k].setFontSize(12);
+                }
+                lastrowcells[1].setBold(true);
+                lastrowcells[1].setText(temp.get(0).buyer_name+" Total");
+                lastrowcells[3].setBold(true);
+                lastrowcells[3].setText(getTotalQuantity(temp));
+                //lastrowcells[4].setBold(true);
+                //lastrowcells[4].setText(getTotalRate(temp));
                 doc.write(fos);
                 fos.close();
             }
         }
         catch(Exception e){}
         jDialog1.setVisible(false);
+        jDialog1.setVisible(false);
+        int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog2.getHeight())/2;
+        jDialog2.setBounds(xco,yco,jDialog2.getWidth(),jDialog2.getHeight());
+        jDialog2.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton8KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton8KeyPressed
@@ -669,6 +792,32 @@ public class HomePage extends javax.swing.JFrame {
         if(evt.getKeyChar()=='\n')
             jButton10.doClick();
     }//GEN-LAST:event_jButton10KeyPressed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        il=new ItemsList();
+        il.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        il.setVisible(true);
+        LoginPage.hp.setVisible(false);
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        // TODO add your handling code here:
+        jDialog1.setVisible(false);
+        jDialog2.setVisible(false);
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton11KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton11KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton11.doClick();
+    }//GEN-LAST:event_jButton11KeyPressed
+
+    private void jButton12KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton12KeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyChar()=='\n')
+            jButton12.doClick();
+    }//GEN-LAST:event_jButton12KeyPressed
 
     /**
      * @param args the command line arguments
@@ -708,6 +857,8 @@ public class HomePage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -717,6 +868,8 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JDialog jDialog2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,6 +13,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigInteger;
+import java.sql.DriverManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
@@ -58,7 +59,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                     jComboBox2.removeAllItems();
                     Vector<Buyer> buyerlist;
                     if(jTextField1.getText().trim().equals(""))
-                       buyerlist=LoginPage.datop.getBuyerList();
+                        buyerlist=LoginPage.datop.getBuyerList();
                     else
                         buyerlist=LoginPage.datop.getSpecificBuyerList(jTextField1.getText().trim().toUpperCase());
                     for(int i=0;i<buyerlist.size();i++)
@@ -360,7 +361,7 @@ public class CustomerHistory extends javax.swing.JFrame {
         jPanel1.add(jButton3, gridBagConstraints);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jButton4.setText("Print");
+        jButton4.setText("Save");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -379,7 +380,7 @@ public class CustomerHistory extends javax.swing.JFrame {
         jPanel1.add(jButton4, gridBagConstraints);
 
         jButton5.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jButton5.setText("Print");
+        jButton5.setText("Save");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -414,46 +415,41 @@ public class CustomerHistory extends javax.swing.JFrame {
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
-        else
+        Vector<Seller> sellerlist;
+        Vector<Buyer> buyerlist;
+        String text=jTextField1.getText().trim().toUpperCase();
+        if(text.equals(""))
         {
-            Vector<Seller> sellerlist;
-            Vector<Buyer> buyerlist;
-            String text=jTextField1.getText().trim().toUpperCase();
-            if(text.equals(""))
+            if(jComboBox1.getSelectedIndex()==0)
             {
-                if(jComboBox1.getSelectedIndex()==0)
-                {
-                    sellerlist=LoginPage.datop.getSellerList();
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<sellerlist.size();i++)
-                        jComboBox2.addItem(sellerlist.get(i).name);
-                }
-                else
-                {
-                    buyerlist=LoginPage.datop.getBuyerList();
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<buyerlist.size();i++)
-                        jComboBox2.addItem(buyerlist.get(i).name);
-                }
+                sellerlist=LoginPage.datop.getSellerList();
+                jComboBox2.removeAllItems();
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox2.addItem(sellerlist.get(i).name);
             }
             else
             {
-                if(jComboBox1.getSelectedIndex()==0)
-                {
-                    sellerlist=LoginPage.datop.getSpecificSellerList(text);
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<sellerlist.size();i++)
-                        jComboBox2.addItem(sellerlist.get(i).name);
-                }
-                else
-                {
-                    buyerlist=LoginPage.datop.getSpecificBuyerList(text);
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<buyerlist.size();i++)
-                        jComboBox2.addItem(buyerlist.get(i).name);
-                }
+                buyerlist=LoginPage.datop.getBuyerList();
+                jComboBox2.removeAllItems();
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox2.addItem(buyerlist.get(i).name);
+            }
+        }
+        else
+        {
+            if(jComboBox1.getSelectedIndex()==0)
+            {
+                sellerlist=LoginPage.datop.getSpecificSellerList(text);
+                jComboBox2.removeAllItems();
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox2.addItem(sellerlist.get(i).name);
+            }
+            else
+            {
+                buyerlist=LoginPage.datop.getSpecificBuyerList(text);
+                jComboBox2.removeAllItems();
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox2.addItem(buyerlist.get(i).name);
             }
         }
     }//GEN-LAST:event_jTextField1KeyReleased
@@ -508,7 +504,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                 jPanel1.add(times[i],gbc);
                 customers[i]=new JLabel();
                 customers[i].setFont(new java.awt.Font("Tahoma",0,20));
-                customers[i].setText(transactions.get(i).buyer_code+": "+transactions.get(i).buyer_name);
+                customers[i].setText(transactions.get(i).buyer_code+"- "+transactions.get(i).buyer_name);
                 customers[i].setPreferredSize(new java.awt.Dimension(302,40));
                 customers[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 customers[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -583,7 +579,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                 jPanel1.add(times[i],gbc);
                 customers[i]=new JLabel();
                 customers[i].setFont(new java.awt.Font("Tahoma",0,20));
-                customers[i].setText(transactions.get(i).seller_code+": "+transactions.get(i).seller_name);
+                customers[i].setText(transactions.get(i).seller_code+"- "+transactions.get(i).seller_name);
                 customers[i].setPreferredSize(new java.awt.Dimension(302,40));
                 customers[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=3;
@@ -663,16 +659,17 @@ public class CustomerHistory extends javax.swing.JFrame {
             String leftlines[]=b.left.split("\n");
             String rightlines[]=b.right.split("\n");
             String filename;
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyy%20HH%20mm%20ss");  
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
             LocalDateTime now = LocalDateTime.now();
             String datetime=dtf.format(now);
-            File file=new File("CustomerHistory");
+            File file=new File(LoginPage.loggedInUser+" Customer History");
             file.mkdir();
-            filename="CustomerHistory\\"+jComboBox2.getSelectedItem().toString().trim()+datetime+".docx";
+            filename=LoginPage.loggedInUser+" Customer History\\"+jComboBox2.getSelectedItem().toString().trim()+" "+datetime+".docx";
             XWPFDocument doc=new XWPFDocument();
             FileOutputStream fos=new FileOutputStream(new File(filename));
             XWPFParagraph para1=doc.createParagraph();
             para1.setAlignment(ParagraphAlignment.CENTER);
+            int tempVariable=Integer.MAX_VALUE;
             for(int i=0;i<leftlines.length&&i<rightlines.length;i++)
             {
                 XWPFRun left=para1.createRun();
@@ -683,6 +680,23 @@ public class CustomerHistory extends javax.swing.JFrame {
                 right.setFontFamily("Calibri");
                 right.setFontSize(14);
                 right.setText(rightlines[i]);
+                right.addBreak();
+                tempVariable=i+1;
+            }
+            for(int i=tempVariable;i<leftlines.length;i++)
+            {
+                XWPFRun left=para1.createRun();
+                left.setFontFamily("Calibri");
+                left.setFontSize(14);
+                left.setText(leftlines[i]+"\t\t\t\t\t\t\t\t\t");
+                left.addBreak();
+            }
+            for(int i=tempVariable;i<rightlines.length;i++)
+            {
+                XWPFRun right=para1.createRun();
+                right.setFontFamily("Calibri");
+                right.setFontSize(14);
+                right.setText("\t\t\t\t\t\t\t\t"+rightlines[i]);
                 right.addBreak();
             }
             XWPFParagraph para2=doc.createParagraph();
@@ -720,7 +734,13 @@ public class CustomerHistory extends javax.swing.JFrame {
                 myRun.setFontFamily("Calibri");
                 myRun.setFontSize(12);
                 myRun.setBold(true);
-                myRun.setText("SELLER\t"+temp.get(0).seller_code+"- "+temp.get(0).seller_name);
+                myRun.setText("SELLER:\t"+temp.get(0).seller_name);
+                myRun.addBreak();
+                XWPFRun mySecondRun=sellerName.createRun();
+                mySecondRun.setFontFamily("Calibri");
+                mySecondRun.setFontSize(12);
+                mySecondRun.setBold(true);
+                mySecondRun.setText(LoginPage.datop.getSellerPlace(temp.get(0).seller_code,temp.get(0).seller_name));
                 XWPFTable table=doc.createTable();
                 XWPFTableRow row1=table.getRow(0);
                 row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
@@ -759,11 +779,30 @@ public class CustomerHistory extends javax.swing.JFrame {
                         rowcelli[j].setFontSize(12);
                     }
                     rowcelli[0].setText(temp.get(i).date);
-                    rowcelli[1].setText(temp.get(i).buyer_code+"- "+temp.get(i).buyer_name);
+                    rowcelli[1].setText(temp.get(i).buyer_name);
                     rowcelli[2].setText(temp.get(i).item);
                     rowcelli[3].setText(Integer.toString(temp.get(i).quantity));
                     rowcelli[4].setText(Integer.toString(temp.get(i).rate));
                 }
+                XWPFTableRow lastRow=table.createRow();
+                XWPFRun lastrowcells[]=new XWPFRun[5];
+                for(int k=0;k<lastrowcells.length;k++)
+                {
+                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells[k].setFontFamily("Calibri");
+                    lastrowcells[k].setFontSize(12);
+                }
+                lastrowcells[1].setBold(true);
+                lastrowcells[1].setText(temp.get(0).seller_name+" Total");
+                lastrowcells[3].setBold(true);
+                lastrowcells[3].setText(getTotalQuantity(temp));
+                //lastrowcells[4].setBold(true);
+                //lastrowcells[4].setText(getTotalRate(temp));
             }
             else
             {
@@ -774,7 +813,13 @@ public class CustomerHistory extends javax.swing.JFrame {
                 myRun.setFontFamily("Calibri");
                 myRun.setFontSize(12);
                 myRun.setBold(true);
-                myRun.setText("BUYER\t"+temp.get(0).buyer_code+"- "+temp.get(0).buyer_name);
+                myRun.setText("BUYER:\t"+temp.get(0).buyer_name);
+                myRun.addBreak();
+                XWPFRun mySecondRun=buyerName.createRun();
+                mySecondRun.setFontFamily("Calibri");
+                mySecondRun.setFontSize(12);
+                mySecondRun.setBold(true);
+                mySecondRun.setText(LoginPage.datop.getBuyerPlace(temp.get(0).buyer_code,temp.get(0).buyer_name));
                 XWPFTable table=doc.createTable();
                 XWPFTableRow row1=table.getRow(0);
                 row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
@@ -813,11 +858,30 @@ public class CustomerHistory extends javax.swing.JFrame {
                         rowcelli[j].setFontSize(12);
                     }
                     rowcelli[0].setText(temp.get(i).date);
-                    rowcelli[1].setText(temp.get(i).seller_code+"- "+temp.get(i).seller_name);
+                    rowcelli[1].setText(temp.get(i).seller_name);
                     rowcelli[2].setText(temp.get(i).item);
                     rowcelli[3].setText(Integer.toString(temp.get(i).quantity));
                     rowcelli[4].setText(Integer.toString(temp.get(i).rate));
                 }
+                XWPFTableRow lastRow=table.createRow();
+                XWPFRun lastrowcells[]=new XWPFRun[5];
+                for(int k=0;k<lastrowcells.length;k++)
+                {
+                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells[k].setFontFamily("Calibri");
+                    lastrowcells[k].setFontSize(12);
+                }
+                lastrowcells[1].setBold(true);
+                lastrowcells[1].setText(temp.get(0).buyer_name+" Total");
+                lastrowcells[3].setBold(true);
+                lastrowcells[3].setText(getTotalQuantity(temp));
+                //lastrowcells[4].setBold(true);
+                //lastrowcells[4].setText(getTotalRate(temp));
             }
             askPrint(filename);
             doc.write(fos);
@@ -825,7 +889,20 @@ public class CustomerHistory extends javax.swing.JFrame {
         }
         catch(Exception e){}
     }//GEN-LAST:event_jButton4ActionPerformed
-
+    public String getTotalQuantity(Vector<Transaction> temp)
+    {
+        int total=0;
+        for(int i=0;i<temp.size();i++)
+            total+=temp.get(i).quantity;
+        return Integer.toString(total);
+    }
+    public String getTotalRate(Vector<Transaction> temp)
+    {
+        int total=0;
+        for(int i=0;i<temp.size();i++)
+            total+=temp.get(i).rate;
+        return Integer.toString(total);
+    }
     public void askPrint(String filename)
     {
         myFileName=filename;
@@ -876,6 +953,7 @@ public class CustomerHistory extends javax.swing.JFrame {
             Desktop.getDesktop().print(new File(myFileName));
         }
         catch(Exception e){}
+        jDialog1.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton6KeyPressed

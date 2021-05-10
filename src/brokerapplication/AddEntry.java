@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.DriverManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
@@ -30,11 +31,11 @@ public class AddEntry extends javax.swing.JFrame {
     /**
      * Creates new form AddEntry
      */
-    int max_parts=99;
-    
-    JLabel partindex[],partcodelabel[],partnamelabel[],partproductlabel[],partquantitylabel[],partratelabel[];
+    int max_parts=999;
+    Vector<Item> itemlist;
+    JLabel partindex[],partcodelabel[],partnamelabel[],partproductlabel[],partquantitylabel[],partratelabel[],partitemlabel[];
     JTextField partcode[],partproduct[],partquantity[],partrate[];
-    JComboBox partname[];
+    JComboBox partname[],partitemname[];
     int ind=0;
     public AddEntry() {
         initComponents();
@@ -50,11 +51,16 @@ public class AddEntry extends javax.swing.JFrame {
         partname=new JComboBox[max_parts];
         partquantity=new JTextField[max_parts];
         partrate=new JTextField[max_parts];
+        partitemname=new JComboBox[max_parts];
+        partitemlabel=new JLabel[max_parts];
         initComps();
     }
     
     public void initComps()
     {
+        itemlist=LoginPage.datop.getItems();
+        for(int i=0;i<itemlist.size();i++)
+            jComboBox4.addItem(itemlist.get(i).name);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDateTime now = LocalDateTime.now();
         jTextField6.setText(dtf.format(now));
@@ -75,7 +81,7 @@ public class AddEntry extends javax.swing.JFrame {
                     jComboBox3.removeAllItems();
                     Vector<Buyer> buyerlist;
                     if(jTextField1.getText().trim().equals(""))
-                       buyerlist=LoginPage.datop.getBuyerList();
+                        buyerlist=LoginPage.datop.getBuyerList();
                     else
                         buyerlist=LoginPage.datop.getSpecificBuyerList(jTextField1.getText().trim().toUpperCase());
                     for(int i=0;i<buyerlist.size();i++)
@@ -189,6 +195,8 @@ public class AddEntry extends javax.swing.JFrame {
         jTextField6 = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jButton6 = new javax.swing.JButton();
+        jComboBox4 = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
 
         jDialog1.setTitle("Confirmation");
         jDialog1.setSize(new java.awt.Dimension(400, 300));
@@ -238,7 +246,7 @@ public class AddEntry extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 0);
         jPanel1.add(jLabel1, gridBagConstraints);
 
@@ -336,7 +344,15 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(jComboBox3, gridBagConstraints);
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField3.setPreferredSize(new java.awt.Dimension(150, 50));
+        jTextField3.setPreferredSize(new java.awt.Dimension(100, 50));
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField3KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField3KeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
@@ -412,7 +428,7 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(jLabel9, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel10.setText("Item");
+        jLabel10.setText("Code");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
@@ -434,7 +450,7 @@ public class AddEntry extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.insets = new java.awt.Insets(80, 0, 0, 0);
         jPanel1.add(jButton1, gridBagConstraints);
 
@@ -459,7 +475,7 @@ public class AddEntry extends javax.swing.JFrame {
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField4.setPreferredSize(new java.awt.Dimension(100, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 30);
         jPanel1.add(jTextField4, gridBagConstraints);
@@ -467,7 +483,7 @@ public class AddEntry extends javax.swing.JFrame {
         jTextField5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField5.setPreferredSize(new java.awt.Dimension(100, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jPanel1.add(jTextField5, gridBagConstraints);
@@ -475,7 +491,7 @@ public class AddEntry extends javax.swing.JFrame {
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel11.setText("Quantity");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 30);
         jPanel1.add(jLabel11, gridBagConstraints);
@@ -483,7 +499,7 @@ public class AddEntry extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel12.setText("Rate");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 5;
         jPanel1.add(jLabel12, gridBagConstraints);
 
@@ -493,6 +509,7 @@ public class AddEntry extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 100, 0);
         jPanel1.add(jTextField6, gridBagConstraints);
 
@@ -519,9 +536,25 @@ public class AddEntry extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 6;
+        gridBagConstraints.gridwidth = 7;
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 50, 0);
         jPanel1.add(jButton6, gridBagConstraints);
+
+        jComboBox4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jComboBox4.setPreferredSize(new java.awt.Dimension(200, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 30);
+        jPanel1.add(jComboBox4, gridBagConstraints);
+
+        jLabel16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel16.setText("Item");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 30);
+        jPanel1.add(jLabel16, gridBagConstraints);
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -563,7 +596,7 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(partnamelabel[ind],gbc);
         partproductlabel[ind]=new JLabel();
         partproductlabel[ind].setFont(new java.awt.Font("Tahoma",0,18));
-        partproductlabel[ind].setText("Item");
+        partproductlabel[ind].setText("Code");
         gbc.gridx=3;
         gbc.gridy=ind+ind+7;
         gbc.insets=new Insets(0,0,0,30);
@@ -582,8 +615,6 @@ public class AddEntry extends javax.swing.JFrame {
         partcode[ind].addKeyListener(new KeyListener(){
             @Override
             public void keyReleased(KeyEvent e) {
-                if(e.getKeyChar()=='\n')
-                    return;
                 JTextField source=(JTextField) e.getSource();
                 int selected=Integer.parseInt(source.getName());
                 Vector<Seller> sellerlist;
@@ -640,7 +671,40 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(partcode[ind],gbc);
         partproduct[ind]=new JTextField();
         partproduct[ind].setFont(new java.awt.Font("Tahoma",0,24));
-        partproduct[ind].setPreferredSize(new java.awt.Dimension(150,50));
+        partproduct[ind].setPreferredSize(new java.awt.Dimension(100,50));
+        partproduct[ind].setName(Integer.toString(ind));
+        partproduct[ind].addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                JTextField source=(JTextField) e.getSource();
+                int selected=Integer.parseInt(source.getName());
+                Vector<Item> templist;
+                String text=partproduct[selected].getText().trim().toUpperCase();
+                if(text.equals(""))
+                {
+                    templist=LoginPage.datop.getItems();
+                    partitemname[selected].removeAllItems();
+                    for(int i=0;i<templist.size();i++)
+                        partitemname[selected].addItem(templist.get(i).name);
+                }
+                else
+                {
+                    templist=LoginPage.datop.getSpecificItemList(text);
+                    partitemname[selected].removeAllItems();
+                    for(int i=0;i<templist.size();i++)
+                        partitemname[selected].addItem(templist.get(i).name);
+                }
+            }
+            
+        });
         gbc.gridx=3;
         gbc.gridy=ind+ind+8;
         gbc.insets=new Insets(0,0,15,30);
@@ -664,31 +728,47 @@ public class AddEntry extends javax.swing.JFrame {
         gbc.gridy=ind+ind+8;
         gbc.insets=new Insets(0,0,15,30);
         jPanel1.add(partname[ind],gbc);
+        partitemlabel[ind]=new JLabel();
+        partitemlabel[ind].setFont(new java.awt.Font("Tahoma",0,18));
+        partitemlabel[ind].setText("Item");
+        gbc.gridx=4;
+        gbc.gridy=ind+ind+7;
+        gbc.insets=new Insets(0,0,0,30);
+        jPanel1.add(partitemlabel[ind],gbc);
+        partitemname[ind]=new JComboBox();
+        partitemname[ind].setFont(new java.awt.Font("Tahoma",0,24));
+        partitemname[ind].setPreferredSize(new java.awt.Dimension(200,50));
+        for(int i=0;i<itemlist.size();i++)
+            partitemname[ind].addItem(itemlist.get(i).name);
+        gbc.gridx=4;
+        gbc.gridy=ind+ind+8;
+        gbc.insets=new Insets(0,0,15,30);
+        jPanel1.add(partitemname[ind],gbc);
         partquantitylabel[ind]=new JLabel();
         partquantitylabel[ind].setFont(new java.awt.Font("Tahoma",0,18));
         partquantitylabel[ind].setText("Quantity");
-        gbc.gridx=4;
+        gbc.gridx=5;
         gbc.gridy=ind+ind+7;
         gbc.insets=new Insets(0,0,0,30);
         jPanel1.add(partquantitylabel[ind],gbc);
         partratelabel[ind]=new JLabel();
         partratelabel[ind].setFont(new java.awt.Font("Tahoma",0,18));
         partratelabel[ind].setText("Rate");
-        gbc.gridx=5;
+        gbc.gridx=6;
         gbc.gridy=ind+ind+7;
         gbc.insets=new Insets(0,0,0,0);
         jPanel1.add(partratelabel[ind],gbc);
         partquantity[ind]=new JTextField();
         partquantity[ind].setFont(new java.awt.Font("Tahoma",0,24));
         partquantity[ind].setPreferredSize(new java.awt.Dimension(100,50));;
-        gbc.gridx=4;
+        gbc.gridx=5;
         gbc.gridy=ind+ind+8;
         gbc.insets=new Insets(0,0,15,30);
         jPanel1.add(partquantity[ind],gbc);
         partrate[ind]=new JTextField();
         partrate[ind].setFont(new java.awt.Font("Tahoma",0,24));
         partrate[ind].setPreferredSize(new java.awt.Dimension(100,50));
-        gbc.gridx=5;
+        gbc.gridx=6;
         gbc.gridy=ind+ind+8;
         gbc.insets=new Insets(0,0,15,0);
         jPanel1.add(partrate[ind],gbc);
@@ -740,6 +820,8 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.remove(partratelabel[ind]);
         jPanel1.remove(partquantity[ind]);
         jPanel1.remove(partrate[ind]);
+        jPanel1.remove(partitemname[ind]);
+        jPanel1.remove(partitemlabel[ind]);
         ind--;
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridx=1;
@@ -776,130 +858,117 @@ public class AddEntry extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
-        else
+        Vector<Seller> sellerlist;
+        Vector<Buyer> buyerlist;
+        String text=jTextField1.getText().trim().toUpperCase();
+        if(text.equals(""))
         {
-            Vector<Seller> sellerlist;
-            Vector<Buyer> buyerlist;
-            String text=jTextField1.getText().trim().toUpperCase();
-            if(text.equals(""))
+            if(jComboBox1.getSelectedIndex()==0)
             {
-                if(jComboBox1.getSelectedIndex()==0)
-                {
-                    sellerlist=LoginPage.datop.getSellerList();
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<sellerlist.size();i++)
-                        jComboBox2.addItem(sellerlist.get(i).name);
-                }
-                else
-                {
-                    buyerlist=LoginPage.datop.getBuyerList();
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<buyerlist.size();i++)
-                        jComboBox2.addItem(buyerlist.get(i).name);
-                }
+                sellerlist=LoginPage.datop.getSellerList();
+                jComboBox2.removeAllItems();
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox2.addItem(sellerlist.get(i).name);
             }
             else
             {
-                if(jComboBox1.getSelectedIndex()==0)
-                {
-                    sellerlist=LoginPage.datop.getSpecificSellerList(text);
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<sellerlist.size();i++)
-                        jComboBox2.addItem(sellerlist.get(i).name);
-                }
-                else
-                {
-                    buyerlist=LoginPage.datop.getSpecificBuyerList(text);
-                    jComboBox2.removeAllItems();
-                    for(int i=0;i<buyerlist.size();i++)
-                        jComboBox2.addItem(buyerlist.get(i).name);
-                }
+                buyerlist=LoginPage.datop.getBuyerList();
+                jComboBox2.removeAllItems();
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox2.addItem(buyerlist.get(i).name);
             }
-        }        // TODO add your handling code here:
+        }
+        else
+        {
+            if(jComboBox1.getSelectedIndex()==0)
+            {
+                sellerlist=LoginPage.datop.getSpecificSellerList(text);
+                jComboBox2.removeAllItems();
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox2.addItem(sellerlist.get(i).name);
+            }
+            else
+            {
+                buyerlist=LoginPage.datop.getSpecificBuyerList(text);
+                jComboBox2.removeAllItems();
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox2.addItem(buyerlist.get(i).name);
+            }
+        }     // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton1.doClick();
-        else
+        Vector<Seller> sellerlist;
+        Vector<Buyer> buyerlist;
+        String text=jTextField2.getText().trim().toUpperCase();
+        if(text.equals(""))
         {
-            Vector<Seller> sellerlist;
-            Vector<Buyer> buyerlist;
-            String text=jTextField2.getText().trim().toUpperCase();
-            if(text.equals(""))
+            if(jComboBox1.getSelectedIndex()==1)
             {
-                if(jComboBox1.getSelectedIndex()==1)
-                {
-                    sellerlist=LoginPage.datop.getSellerList();
-                    jComboBox3.removeAllItems();
-                    for(int i=0;i<sellerlist.size();i++)
-                        jComboBox3.addItem(sellerlist.get(i).name);
-                }
-                else
-                {
-                    buyerlist=LoginPage.datop.getBuyerList();
-                    jComboBox3.removeAllItems();
-                    for(int i=0;i<buyerlist.size();i++)
-                        jComboBox3.addItem(buyerlist.get(i).name);
-                }
+                sellerlist=LoginPage.datop.getSellerList();
+                jComboBox3.removeAllItems();
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox3.addItem(sellerlist.get(i).name);
             }
             else
             {
-                if(jComboBox1.getSelectedIndex()==1)
-                {
-                    sellerlist=LoginPage.datop.getSpecificSellerList(text);
-                    jComboBox3.removeAllItems();
-                    for(int i=0;i<sellerlist.size();i++)
-                        jComboBox3.addItem(sellerlist.get(i).name);
-                }
-                else
-                {
-                    buyerlist=LoginPage.datop.getSpecificBuyerList(text);
-                    jComboBox3.removeAllItems();
-                    for(int i=0;i<buyerlist.size();i++)
-                        jComboBox3.addItem(buyerlist.get(i).name);
-                }
+                buyerlist=LoginPage.datop.getBuyerList();
+                jComboBox3.removeAllItems();
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox3.addItem(buyerlist.get(i).name);
+            }
+        }
+        else
+        {
+            if(jComboBox1.getSelectedIndex()==1)
+            {
+                sellerlist=LoginPage.datop.getSpecificSellerList(text);
+                jComboBox3.removeAllItems();
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox3.addItem(sellerlist.get(i).name);
+            }
+            else
+            {
+                buyerlist=LoginPage.datop.getSpecificBuyerList(text);
+                jComboBox3.removeAllItems();
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox3.addItem(buyerlist.get(i).name);
             }
         }
     }//GEN-LAST:event_jTextField2KeyReleased
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        int xco=(LoginPage.hp.getWidth()-jDialog1.getWidth())/2;
-        int yco=(LoginPage.hp.getHeight()-jDialog1.getHeight())/2;
-        jDialog1.setBounds(xco,yco,jDialog1.getWidth(),jDialog1.getHeight());
-        jDialog1.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here
         if(jComboBox2.getItemCount()==0)
         {
             JOptionPane.showMessageDialog(null,"Name Can't be empty","Error: invalid input",JOptionPane.ERROR_MESSAGE);
             jTextField1.requestFocus();
+            return;
         }
         else if(jComboBox3.getItemCount()==0)
         {
             JOptionPane.showMessageDialog(null,"Name Can't be empty","Error: invalid input",JOptionPane.ERROR_MESSAGE);
             jTextField2.requestFocus();
+            return;
         }
-        else if(jTextField3.getText().trim().equals(""))
+        else if(jComboBox4.getItemCount()==0)
         {
             JOptionPane.showMessageDialog(null,"Item Can't be empty","Error: invalid input",JOptionPane.ERROR_MESSAGE);
             jTextField3.requestFocus();
+            return;
         }
         else if(jTextField4.getText().trim().equals(""))
         {
             JOptionPane.showMessageDialog(null,"Quantity Can't be empty","Error: invalid input",JOptionPane.ERROR_MESSAGE);
             jTextField4.requestFocus();
+            return;
         }
         else if(jTextField5.getText().trim().equals(""))
         {
             JOptionPane.showMessageDialog(null,"Rate Can't be empty","Error: invalid input",JOptionPane.ERROR_MESSAGE);
             jTextField5.requestFocus();
+            return;
         }
         else
         {
@@ -910,6 +979,12 @@ public class AddEntry extends javax.swing.JFrame {
                 {
                     JOptionPane.showMessageDialog(null,"Name Can't be empty","Error: invalid input",JOptionPane.ERROR_MESSAGE);
                     partcode[i].requestFocus();
+                    break;
+                }
+                else if(partitemname[i].getItemCount()==0)
+                {
+                    JOptionPane.showMessageDialog(null,"Item Can't be empty","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                    partproduct[i].requestFocus();
                     break;
                 }
                 else if(partquantity[i].getText().trim().equals(""))
@@ -928,6 +1003,14 @@ public class AddEntry extends javax.swing.JFrame {
             if(i!=ind)
             return;
         }
+        int xco=(LoginPage.hp.getWidth()-jDialog1.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog1.getHeight())/2;
+        jDialog1.setBounds(xco,yco,jDialog1.getWidth(),jDialog1.getHeight());
+        jDialog1.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
         Vector<Seller> finalsellerlist=new Vector<Seller>();
         Vector<Buyer> finalbuyerlist=new Vector<Buyer>();
         Seller mainseller;
@@ -938,12 +1021,12 @@ public class AddEntry extends javax.swing.JFrame {
         {
             mainseller=new Seller(jTextField1.getText().trim().toUpperCase(),jComboBox2.getSelectedItem().toString(),0);
             finalbuyerlist.add(new Buyer(jTextField2.getText().trim().toUpperCase(),jComboBox3.getSelectedItem().toString(),Integer.parseInt(jTextField4.getText().trim())));
-            items.add(jTextField3.getText());
+            items.add(jComboBox4.getSelectedItem().toString());
             rate.add(jTextField5.getText());
             for(int i=0;i<ind;i++)
             {
                 finalbuyerlist.add(new Buyer(partcode[i].getText(),partname[i].getSelectedItem().toString(),Integer.parseInt(partquantity[i].getText())));
-                items.add(partproduct[i].getText());
+                items.add(partitemname[i].getSelectedItem().toString());
                 rate.add(partrate[i].getText());
             }
             LoginPage.datop.addSellerWiseTransaction(mainseller,finalbuyerlist,items,rate,jTextField6.getText().trim());
@@ -952,12 +1035,12 @@ public class AddEntry extends javax.swing.JFrame {
         {
             mainbuyer=new Buyer(jTextField1.getText(),jComboBox2.getSelectedItem().toString(),0);
             finalsellerlist.add(new Seller(jTextField2.getText(),jComboBox3.getSelectedItem().toString(),Integer.parseInt(jTextField4.getText().trim())));
-            items.add(jTextField3.getText());
+            items.add(jComboBox4.getSelectedItem().toString());
             rate.add(jTextField5.getText());
             for(int i=0;i<ind;i++)
             {
                 finalsellerlist.add(new Seller(partcode[i].getText(),partname[i].getSelectedItem().toString(),Integer.parseInt(partquantity[i].getText())));
-                items.add(partproduct[i].getText());
+                items.add(partitemname[i].getSelectedItem().toString());
                 rate.add(partrate[i].getText());
             }
             LoginPage.datop.addBuyerWiseTransaction(mainbuyer,finalsellerlist,items,rate,jTextField6.getText().trim());
@@ -1021,6 +1104,30 @@ public class AddEntry extends javax.swing.JFrame {
             jButton5.doClick();
     }//GEN-LAST:event_jDialog1KeyPressed
 
+    private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3KeyPressed
+
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+        // TODO add your handling code here:
+        Vector<Item> templist;
+        String text=jTextField3.getText().trim().toUpperCase();
+        if(text.equals(""))
+        {
+            templist=LoginPage.datop.getItems();
+            jComboBox4.removeAllItems();
+            for(int i=0;i<templist.size();i++)
+                jComboBox4.addItem(templist.get(i).name);
+        }
+        else
+        {
+            templist=LoginPage.datop.getSpecificItemList(text);
+            jComboBox4.removeAllItems();
+            for(int i=0;i<templist.size();i++)
+                jComboBox4.addItem(templist.get(i).name);
+        }
+    }//GEN-LAST:event_jTextField3KeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -1066,6 +1173,7 @@ public class AddEntry extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1074,6 +1182,7 @@ public class AddEntry extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

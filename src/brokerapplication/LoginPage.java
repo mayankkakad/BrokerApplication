@@ -173,6 +173,11 @@ public class LoginPage extends javax.swing.JFrame {
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField3.setPreferredSize(new java.awt.Dimension(250, 60));
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField3KeyPressed(evt);
@@ -443,7 +448,6 @@ public class LoginPage extends javax.swing.JFrame {
                 jLabel5.setText("Password empty!");
             else
             {
-                datop=new DatabaseOperations();
                 int result=datop.verify_credentials(username, password);
                 if(result==0)
                     jLabel5.setText("Username does not exist!");
@@ -488,8 +492,11 @@ public class LoginPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         int x1=jDialog1.getWidth();
         int y1=jDialog1.getHeight();
-        int xco=(basex-x1)/2;
-        int yco=(basey-y1)/2;
+        int xco=(LoginPage.lp.getWidth()-x1)/2;
+        int yco=(LoginPage.lp.getHeight()-y1)/2;
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jPasswordField2.setText("");
         jDialog1.setBounds(xco,yco,x1,y1);
         jDialog1.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -510,8 +517,8 @@ public class LoginPage extends javax.swing.JFrame {
                 jLabel9.setText(datop.getSecurityQuestion(forgot_user));
                 int x1=jDialog2.getWidth();
                 int y1=jDialog2.getHeight();
-                int xco=(basex-x1)/2;
-                int yco=(basey-y1)/2;
+                int xco=(LoginPage.lp.getWidth()-x1)/2;
+                int yco=(LoginPage.lp.getHeight()-y1)/2;
                 jDialog2.setBounds(xco,yco,x1,y1);
                 jDialog2.setVisible(true);
                 jDialog1.setVisible(false);
@@ -536,8 +543,8 @@ public class LoginPage extends javax.swing.JFrame {
             {
                 int x1=jDialog3.getWidth();
                 int y1=jDialog3.getHeight();
-                int xco=(basex-x1)/2;
-                int yco=(basey-y1)/2;
+                int xco=(LoginPage.lp.getWidth()-x1)/2;
+                int yco=(LoginPage.lp.getHeight()-y1)/2;
                 jDialog3.setBounds(xco,yco,x1,y1);
                 jDialog3.setVisible(true);
                 jDialog2.setVisible(false);
@@ -624,6 +631,10 @@ public class LoginPage extends javax.swing.JFrame {
     private void jPasswordField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField2KeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPasswordField2KeyPressed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
 
     /**
      * @param args the command line arguments

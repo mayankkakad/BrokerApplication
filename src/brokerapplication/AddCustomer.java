@@ -8,8 +8,13 @@ package brokerapplication;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.sql.DriverManager;
 import java.util.Vector;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -23,13 +28,17 @@ public class AddCustomer extends javax.swing.JFrame {
     /**
      * Creates new form AddCustomer
      */
-    int basex,basey,max_count=99;
+    int basex,basey,max_count=999;
     int gap=30,gapy=50;
     int count=0;
-    Insets numbering,type,code,cusname,tlabel,clabel,nlabel,addbutton,removebutton,donebutton,backbutton;
-    JLabel numbers[],typelabel[],codelabel[],namelabel[];
+    Vector<Seller> sellerlist;
+    Vector<Buyer> buyerlist;
+    Vector<String> sellerplacelist;
+    Vector<String> buyerplacelist;
+    Insets numbering,type,code,cusname,tlabel,clabel,nlabel,addbutton,removebutton,donebutton,backbutton,plabel,place;
+    JLabel numbers[],typelabel[],codelabel[],namelabel[],placelabel[];
     JComboBox typebox[];
-    JTextField codefield[],namefield[];
+    JTextField codefield[],namefield[],placefield[];
     
     public AddCustomer() {
         initComponents();
@@ -40,17 +49,21 @@ public class AddCustomer extends javax.swing.JFrame {
         typebox=new JComboBox[max_count];
         codefield=new JTextField[max_count];
         namefield=new JTextField[max_count];
-        numbering=new Insets(0,0,0,90);
-        type=new Insets(0,0,0,80);
-        code=new Insets(0,0,0,80);
-        cusname=new Insets(0,0,0,0);
-        tlabel=new Insets(30,0,5,80);
-        clabel=new Insets(30,0,5,80);
-        nlabel=new Insets(30,0,5,0);
-        addbutton=new Insets(40,0,0,80);
-        removebutton=new Insets(40,0,0,80);
+        placelabel=new JLabel[max_count];
+        placefield=new JTextField[max_count];
+        numbering=new Insets(0,0,0,50);
+        type=new Insets(0,0,0,40);
+        code=new Insets(0,0,0,40);
+        cusname=new Insets(0,0,0,40);
+        tlabel=new Insets(30,0,5,40);
+        clabel=new Insets(30,0,5,40);
+        nlabel=new Insets(30,0,5,40);
+        addbutton=new Insets(40,0,0,40);
+        removebutton=new Insets(40,0,0,40);
         donebutton=new Insets(60,0,0,0);
         backbutton=new Insets(30,0,50,0);
+        plabel=new Insets(30,0,5,0);
+        place=new Insets(0,0,0,0);
     }
     public void initComps()
     {
@@ -85,6 +98,9 @@ public class AddCustomer extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jTextField3 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
 
         jDialog1.setTitle("Confirmation");
         jDialog1.setSize(new java.awt.Dimension(400, 300));
@@ -144,7 +160,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 70, 0);
         jPanel1.add(jLabel1, gridBagConstraints);
 
@@ -155,7 +171,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 90);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 50);
         jPanel1.add(jLabel2, gridBagConstraints);
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -168,7 +184,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 80);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 40);
         jPanel1.add(jTextField1, gridBagConstraints);
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -177,7 +193,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 80);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 40);
         jPanel1.add(jComboBox1, gridBagConstraints);
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -190,6 +206,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 40);
         jPanel1.add(jTextField2, gridBagConstraints);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -198,7 +215,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 80);
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 40);
         jPanel1.add(jLabel3, gridBagConstraints);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -206,7 +223,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 80);
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 40);
         jPanel1.add(jLabel4, gridBagConstraints);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -214,7 +231,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 0);
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 40);
         jPanel1.add(jLabel5, gridBagConstraints);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -233,7 +250,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(40, 0, 0, 80);
+        gridBagConstraints.insets = new java.awt.Insets(40, 0, 0, 40);
         jPanel1.add(jButton1, gridBagConstraints);
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -251,7 +268,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(40, 0, 0, 80);
+        gridBagConstraints.insets = new java.awt.Insets(40, 0, 0, 40);
         jPanel1.add(jButton2, gridBagConstraints);
 
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -287,7 +304,7 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.insets = new java.awt.Insets(60, 0, 0, 0);
         jPanel1.add(jButton4, gridBagConstraints);
 
@@ -306,9 +323,37 @@ public class AddCustomer extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.gridwidth = 5;
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 0);
         jPanel1.add(jButton6, gridBagConstraints);
+
+        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextField3.setPreferredSize(new java.awt.Dimension(150, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(jTextField3, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel7.setText("Place");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(30, 0, 5, 0);
+        jPanel1.add(jLabel7, gridBagConstraints);
+
+        jButton7.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jButton7.setText("By File");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 70, 0);
+        jPanel1.add(jButton7, gridBagConstraints);
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -316,11 +361,11 @@ public class AddCustomer extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1036, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1110, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
         );
 
         pack();
@@ -387,6 +432,20 @@ public class AddCustomer extends javax.swing.JFrame {
         gbc.gridy=count+count+4;
         gbc.insets=cusname;
         jPanel1.add(namefield[count],gbc);
+        placelabel[count]=new JLabel();
+        placelabel[count].setFont(new java.awt.Font("Tahoma",0,18));
+        placelabel[count].setText("Place");
+        gbc.gridx=4;
+        gbc.gridy=count+count+3;
+        gbc.insets=plabel;
+        jPanel1.add(placelabel[count],gbc);
+        placefield[count]=new JTextField();
+        placefield[count].setFont(new java.awt.Font("Tahoma",0,24));
+        placefield[count].setPreferredSize(new java.awt.Dimension(150,50));
+        gbc.gridx=4;
+        gbc.gridy=count+count+4;
+        gbc.insets=place;
+        jPanel1.add(placefield[count],gbc);
         gbc.gridx=1;
         gbc.gridy=count+count+5;
         gbc.insets=addbutton;
@@ -398,12 +457,12 @@ public class AddCustomer extends javax.swing.JFrame {
         jButton2.setVisible(true);
         gbc.gridx=0;
         gbc.gridy=count+count+6;
-        gbc.gridwidth=4;
+        gbc.gridwidth=5;
         gbc.insets=donebutton;
         jPanel1.add(jButton4,gbc);
         gbc.gridx=0;
         gbc.gridy=count+count+7;
-        gbc.gridwidth=4;
+        gbc.gridwidth=5;
         gbc.insets=backbutton;
         jPanel1.add(jButton6,gbc);
         count++;
@@ -429,6 +488,8 @@ public class AddCustomer extends javax.swing.JFrame {
         jPanel1.remove(typebox[count]);
         jPanel1.remove(codefield[count]);
         jPanel1.remove(namefield[count]);
+        jPanel1.remove(placelabel[count]);
+        jPanel1.remove(placefield[count]);
         count--;
         gbc.gridx=1;
         gbc.gridy=count+count+5;
@@ -440,12 +501,12 @@ public class AddCustomer extends javax.swing.JFrame {
         gbl.setConstraints(jButton2, gbc);
         gbc.gridx=0;
         gbc.gridy=count+count+6;
-        gbc.gridwidth=4;
+        gbc.gridwidth=5;
         gbc.insets=donebutton;
         gbl.setConstraints(jButton4,gbc);
         gbc.gridx=0;
         gbc.gridy=count+count+7;
-        gbc.gridwidth=4;
+        gbc.gridwidth=5;
         gbc.insets=backbutton;
         gbl.setConstraints(jButton6, gbc);
         jButton1.setVisible(true);
@@ -480,6 +541,119 @@ public class AddCustomer extends javax.swing.JFrame {
         }
         if(flag)
         {
+            sellerlist=new Vector<Seller>();
+            buyerlist=new Vector<Buyer>();
+            sellerplacelist=new Vector<String>();
+            buyerplacelist=new Vector<String>();
+            Vector<Integer> sellerindex=new Vector<Integer>();
+            Vector<Integer> buyerindex=new Vector<Integer>();
+            String t=null;
+            String t2=null;
+            if(jTextField1.getText().equals(""))
+                t=null;
+            else
+                t=jTextField1.getText().toUpperCase();
+            if(jTextField3.getText().equals(""))
+                t2=null;
+            else
+                t2=jTextField3.getText().toUpperCase();
+            if(jComboBox1.getSelectedItem().toString().equals("Seller"))
+            {
+                sellerlist.add(new Seller(t,jTextField2.getText().toUpperCase(),0));
+                sellerplacelist.add(t2);
+                sellerindex.add(-1);
+            }
+            else if(jComboBox1.getSelectedItem().toString().equals("Buyer"))
+            {
+                buyerlist.add(new Buyer(t,jTextField2.getText().toUpperCase(),0));
+                buyerplacelist.add(t2);
+                buyerindex.add(-1);
+            }
+            else
+            {
+                sellerlist.add(new Seller(t,jTextField2.getText().toUpperCase(),0));
+                sellerplacelist.add(t2);
+                buyerlist.add(new Buyer(t,jTextField2.getText().toUpperCase(),0));
+                buyerplacelist.add(t2);
+                sellerindex.add(-1);
+                buyerindex.add(-1);
+            }
+            for(int i=0;i<count;i++)
+            {
+                String temp=null;
+                String temp2=null;
+                if(codefield[i].getText().equals(""))
+                    temp=null;
+                else
+                    temp=codefield[i].getText().toUpperCase();
+                if(placefield[i].getText().equals(""))
+                    temp2=null;
+                else
+                    temp2=placefield[i].getText().toUpperCase();
+                if(typebox[i].getSelectedItem().toString().equals("Seller"))
+                {
+                    sellerlist.add(new Seller(temp,namefield[i].getText().toUpperCase(),0));
+                    sellerplacelist.add(temp2);
+                    sellerindex.add(i);
+                }
+                else if(typebox[i].getSelectedItem().toString().equals("Buyer"))
+                {
+                    buyerlist.add(new Buyer(temp,namefield[i].getText().toUpperCase(),0));
+                    buyerplacelist.add(temp2);
+                    buyerindex.add(i);
+                }
+                else
+                {
+                    sellerlist.add(new Seller(temp,namefield[i].getText().toUpperCase(),0));
+                    sellerplacelist.add(temp2);
+                    buyerlist.add(new Buyer(temp,namefield[i].getText().toUpperCase(),0));
+                    buyerplacelist.add(temp2);
+                    sellerindex.add(i);
+                    buyerindex.add(i);
+                }
+            }
+            int sellerError=-1;
+            if(sellerlist.size()>0)
+            {
+                sellerError=LoginPage.datop.checkSellerDatabase(sellerlist);
+                if(sellerError!=-1)
+                {
+                    sellerError=sellerindex.get(sellerError);
+                    if(sellerError==-1)
+                    {
+                        JOptionPane.showMessageDialog(null,"Already a seller","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                        jTextField2.requestFocus();
+                        return;
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Already a seller","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                        namefield[sellerError].requestFocus();
+                        return;
+                    }
+                }
+            }
+            int buyerError=-1;
+            if(buyerlist.size()>0)
+            {
+                buyerError=LoginPage.datop.checkBuyerDatabase(buyerlist);
+                if(buyerError!=-1)
+                {
+                    buyerError=buyerindex.get(buyerError);
+                    if(buyerError==-1)
+                    {
+                        JOptionPane.showMessageDialog(null,"Already a buyer","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                        jTextField2.requestFocus();
+                        return;
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"Already a buyer","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                        namefield[buyerError].requestFocus();
+                        return;
+                    }
+                }
+            }
             basex=HomePage.ac.getWidth();
             basey=HomePage.ac.getHeight();
             int w=jDialog1.getWidth();
@@ -493,43 +667,10 @@ public class AddCustomer extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        Vector<Seller> sellerlist=new Vector<Seller>();
-        Vector<Buyer> buyerlist=new Vector<Buyer>();
-        String t=null;
-        if(jTextField1.getText().equals(""))
-            t=null;
-        else
-            t=jTextField1.getText();
-        if(jComboBox1.getSelectedItem().toString().equals("Seller"))
-            sellerlist.add(new Seller(t,jTextField2.getText(),0));
-        else if(jComboBox1.getSelectedItem().toString().equals("Buyer"))
-            buyerlist.add(new Buyer(t,jTextField2.getText(),0));
-        else
-        {
-            sellerlist.add(new Seller(t,jTextField2.getText(),0));
-            buyerlist.add(new Buyer(t,jTextField2.getText(),0));
-        }
-        for(int i=0;i<count;i++)
-        {
-            String temp=null;
-            if(codefield[i].getText().equals(""))
-                temp=null;
-            else
-                temp=codefield[i].getText();
-            if(typebox[i].getSelectedItem().toString().equals("Seller"))
-                sellerlist.add(new Seller(temp.toUpperCase(),namefield[i].getText().toUpperCase(),0));
-            else if(typebox[i].getSelectedItem().toString().equals("Buyer"))
-                buyerlist.add(new Buyer(temp.toUpperCase(),namefield[i].getText().toUpperCase(),0));
-            else
-            {
-                sellerlist.add(new Seller(temp.toUpperCase(),namefield[i].getText().toUpperCase(),0));
-                buyerlist.add(new Buyer(temp.toUpperCase(),namefield[i].getText().toUpperCase(),0));
-            }
-        }
         if(sellerlist.size()>0)
-            LoginPage.datop.addSeller(sellerlist);
+            LoginPage.datop.addSeller(sellerlist,sellerplacelist);
         if(buyerlist.size()>0)
-            LoginPage.datop.addBuyer(buyerlist);
+            LoginPage.datop.addBuyer(buyerlist,buyerplacelist);
         LoginPage.hp.setVisible(true);
         jDialog1.setVisible(false);
         HomePage.ac.setVisible(false);
@@ -549,8 +690,6 @@ public class AddCustomer extends javax.swing.JFrame {
 
     private void jScrollPane1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jScrollPane1KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton4.doClick();
     }//GEN-LAST:event_jScrollPane1KeyPressed
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
@@ -609,6 +748,49 @@ public class AddCustomer extends javax.swing.JFrame {
             jButton5.doClick();
     }//GEN-LAST:event_jDialog1KeyPressed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            JFileChooser chooser=new JFileChooser();
+            chooser.showOpenDialog(null);
+            FileReader fr=new FileReader(chooser.getCurrentDirectory()+"\\"+chooser.getSelectedFile().getName());
+            BufferedReader br=new BufferedReader(fr);
+            String s=br.readLine();
+            if(s==null)
+                return;
+            if(s.equals("sellers"))
+            {
+                Vector<Seller> newsellerlist=new Vector<Seller>();
+                Vector<String> newplacelist=new Vector<String>();
+                while((s=br.readLine())!=null)
+                {
+                    String customer[]=s.split("\\$");
+                    newsellerlist.add(new Seller(customer[0],customer[1],Integer.parseInt(customer[2])));
+                    newplacelist.add(customer[3]);
+                }
+                LoginPage.datop.addSeller(newsellerlist,newplacelist);
+            }
+            else if(s.equals("buyers"))
+            {
+                Vector<Buyer> newbuyerlist=new Vector<Buyer>();
+                Vector<String> newplacelist=new Vector<String>();
+                while((s=br.readLine())!=null)
+                {
+                    String customer[]=s.split("\\$");
+                    newbuyerlist.add(new Buyer(customer[0],customer[1],Integer.parseInt(customer[2])));
+                    newplacelist.add(customer[3]);
+                }
+                LoginPage.datop.addBuyer(newbuyerlist,newplacelist);
+            }
+            br.close();
+            fr.close();
+            LoginPage.hp.setVisible(true);
+            HomePage.ac.setVisible(false);
+        }
+        catch(Exception e){e.printStackTrace();}
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -651,6 +833,7 @@ public class AddCustomer extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
@@ -659,9 +842,11 @@ public class AddCustomer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }

@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.DriverManager;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -105,7 +106,7 @@ public class BrokerHistory extends javax.swing.JFrame {
             sellers[i].setFont(new java.awt.Font("Tahoma",0,20));
             sellers[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
             sellers[i].setPreferredSize(new java.awt.Dimension(282,40));
-            sellers[i].setText(transactionsToDisplay.get(i).seller_code+": "+transactionsToDisplay.get(i).seller_name);
+            sellers[i].setText(transactionsToDisplay.get(i).seller_code+"- "+transactionsToDisplay.get(i).seller_name);
             sellers[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             gbc.gridx=3;
             gbc.gridy=i+3;
@@ -115,7 +116,7 @@ public class BrokerHistory extends javax.swing.JFrame {
             buyers[i].setFont(new java.awt.Font("Tahoma",0,20));
             buyers[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
             buyers[i].setPreferredSize(new java.awt.Dimension(282,40));
-            buyers[i].setText(transactionsToDisplay.get(i).buyer_code+": "+transactionsToDisplay.get(i).buyer_name);
+            buyers[i].setText(transactionsToDisplay.get(i).buyer_code+"- "+transactionsToDisplay.get(i).buyer_name);
             buyers[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             gbc.gridx=4;
             gbc.gridy=i+3;
@@ -170,7 +171,7 @@ public class BrokerHistory extends javax.swing.JFrame {
                     jTextField4.setText(quantities[selected].getText());
                     jTextField5.setText(rates[selected].getText());
                     int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
-                    int yco=(LoginPage.hp.getHeight()-jDialog2.getWidth())/2;
+                    int yco=(LoginPage.hp.getHeight()-jDialog2.getHeight())/2;
                     jDialog2.setBounds(xco,yco,jDialog2.getWidth(),jDialog2.getHeight());
                     jDialog2.setVisible(true);
                 }
@@ -302,7 +303,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         jDialog1.getContentPane().add(jButton4, gridBagConstraints);
 
         jDialog2.setTitle("Edit Transaction");
-        jDialog2.setSize(new java.awt.Dimension(688, 780));
+        jDialog2.setSize(new java.awt.Dimension(550, 700));
         jDialog2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jDialog2KeyPressed(evt);
@@ -316,7 +317,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 50, 0);
         jDialog2.getContentPane().add(jLabel13, gridBagConstraints);
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -325,7 +326,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel14, gridBagConstraints);
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -335,7 +336,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jTextField1, gridBagConstraints);
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -344,7 +345,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel15, gridBagConstraints);
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -353,7 +354,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jTextField2, gridBagConstraints);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -362,7 +363,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel16, gridBagConstraints);
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -371,7 +372,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel17, gridBagConstraints);
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -381,7 +382,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel18, gridBagConstraints);
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -390,7 +391,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel19, gridBagConstraints);
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -399,7 +400,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel20, gridBagConstraints);
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -407,7 +408,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jTextField3, gridBagConstraints);
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -416,7 +417,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jLabel21, gridBagConstraints);
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -424,7 +425,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 15, 0);
         jDialog2.getContentPane().add(jTextField4, gridBagConstraints);
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -458,7 +459,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(40, 0, 0, 0);
         jDialog2.getContentPane().add(jButton5, gridBagConstraints);
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -477,7 +478,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.insets = new java.awt.Insets(20, 0, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(15, 0, 0, 0);
         jDialog2.getContentPane().add(jButton6, gridBagConstraints);
 
         jDialog3.setTitle("Confirmation");
@@ -869,8 +870,6 @@ public class BrokerHistory extends javax.swing.JFrame {
 
     private void jDialog2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jDialog2KeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='\n')
-            jButton5.doClick();
     }//GEN-LAST:event_jDialog2KeyPressed
 
     private void jButton6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton6KeyPressed
