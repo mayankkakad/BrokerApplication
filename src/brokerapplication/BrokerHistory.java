@@ -29,6 +29,7 @@ public class BrokerHistory extends javax.swing.JFrame {
     Vector<Transaction> transactionsToDisplay;
     
     JLabel sr_nos[],dates[],times[],sellers[],buyers[],items[],quantities[],rates[];
+    JLabel totalQuantity;
     JButton edits[];
     int selected;
     public BrokerHistory() {
@@ -182,8 +183,41 @@ public class BrokerHistory extends javax.swing.JFrame {
             gbc.insets=new Insets(0,0,15,0);
             jPanel1.add(edits[i],gbc);
         }
+        if(!jComboBox1.getSelectedItem().toString().equalsIgnoreCase("all"))
+        {
+            String selectedDate=jComboBox1.getSelectedItem().toString();
+            String totquan=Integer.toString(LoginPage.datop.getTotalQuantity(selectedDate));
+            totalQuantity=new JLabel();
+            totalQuantity.setFont(new java.awt.Font("Tahoma",1,20));
+            totalQuantity.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+            totalQuantity.setPreferredSize(new java.awt.Dimension(102,40));
+            totalQuantity.setText(totquan);
+            totalQuantity.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            gbc.gridx=6;
+            gbc.gridy=i+3;
+            gbc.insets=new Insets(0,0,15,5);
+            jPanel1.add(totalQuantity,gbc);
+        }
+        else
+        {
+            int sum=0;
+            Vector<String> dateVector=LoginPage.datop.getDates();
+            for(int k=0;k<dateVector.size();k++)
+                sum+=LoginPage.datop.getTotalQuantity(dateVector.get(k));
+            String totquan=Integer.toString(sum);
+            totalQuantity=new JLabel();
+            totalQuantity.setFont(new java.awt.Font("Tahoma",1,20));
+            totalQuantity.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+            totalQuantity.setPreferredSize(new java.awt.Dimension(102,40));
+            totalQuantity.setText(totquan);
+            totalQuantity.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            gbc.gridx=6;
+            gbc.gridy=i+3;
+            gbc.insets=new Insets(0,0,15,5);
+            jPanel1.add(totalQuantity,gbc);
+        }
         gbc.gridx=0;
-        gbc.gridy=i+3;
+        gbc.gridy=i+4;
         gbc.gridwidth=9;
         gbc.insets=new Insets(50,0,50,0);
         jPanel1.add(jButton2,gbc);
@@ -204,6 +238,12 @@ public class BrokerHistory extends javax.swing.JFrame {
             jPanel1.remove(quantities[i]);
             jPanel1.remove(rates[i]);
             jPanel1.remove(edits[i]);
+            jPanel1.revalidate();
+            jPanel1.repaint();
+        }
+        if(totalQuantity!=null)
+        {
+            jPanel1.remove(totalQuantity);
             jPanel1.revalidate();
             jPanel1.repaint();
         }

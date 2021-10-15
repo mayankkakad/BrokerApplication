@@ -213,7 +213,7 @@ public class DatabaseOperations {
         try
         {
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\";");
+            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" order by `seller_name` asc;");
             while(rs.next())
                 sellerlist.add(new Seller(rs.getString("seller_code"),rs.getString("seller_name"),rs.getInt("quantity")));
         }
@@ -228,7 +228,7 @@ public class DatabaseOperations {
         try
         {
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\";");
+            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" order by `buyer_name` asc;");
             while(rs.next())
                 buyerlist.add(new Buyer(rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getInt("quantity")));
         }
@@ -298,7 +298,7 @@ public class DatabaseOperations {
         {
             text="%"+text+"%";
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code` like \'"+text+"\';");
+            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code` like \'"+text+"\' order by `seller_name` asc;");
             while(rs.next())
                 sellerlist.add(new Seller(rs.getString("seller_code"),rs.getString("seller_name"),rs.getInt("quantity")));
         }
@@ -314,7 +314,7 @@ public class DatabaseOperations {
         {
             text="%"+text+"%";
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_code` like \'"+text+"\';");
+            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_code` like \'"+text+"\' order by `buyer_name` asc;");
             while(rs.next())
                 buyerlist.add(new Buyer(rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getInt("quantity")));
         }
@@ -469,7 +469,10 @@ public class DatabaseOperations {
         }
         catch(Exception e){e.printStackTrace();}
         try{conn.close();}catch(Exception e){e.printStackTrace();}
-        return transactions;
+        Vector<Transaction> toReturn=new Vector<Transaction>();
+        for(int i=transactions.size()-1;i>=0;i--)
+            toReturn.add(transactions.get(i));
+        return toReturn;
     }
     public void deleteTransactions()
     {
@@ -701,7 +704,7 @@ public class DatabaseOperations {
         try
         {
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `itemdata` where `username`=\""+LoginPage.loggedInUser+"\";");
+            rs=st.executeQuery("select * from `itemdata` where `username`=\""+LoginPage.loggedInUser+"\" order by `item_name` asc;");
             while(rs.next())
                 itemlist.add(new Item(rs.getString("item_code"),rs.getString("item_name")));
         }
@@ -739,7 +742,7 @@ public class DatabaseOperations {
         {
             text="%"+text+"%";
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `itemdata` where `item_code` like \'"+text+"\';");
+            rs=st.executeQuery("select * from `itemdata` where `username`=\""+LoginPage.loggedInUser+"\" and `item_code` like \'"+text+"\' order by `item_name` asc;");
             while(rs.next())
                 itemlist.add(new Item(rs.getString("item_code"),rs.getString("item_name")));
         }
@@ -843,5 +846,50 @@ public class DatabaseOperations {
         }
         catch(Exception e){}
         try{conn.close();}catch(Exception e){e.printStackTrace();}
+    }
+    public int getTotalQuantity(String date)
+    {
+        int x=-1;
+        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select sum(`quantity`) as `quansum` from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `date`=\""+date+"\";");
+            if(rs.next())
+                x=rs.getInt("quansum");
+        }
+        catch(Exception e){e.printStackTrace();}
+        try{conn.close();}catch(Exception e){e.printStackTrace();}
+        return x;
+    }
+    public int getSellerQuantity(String seller_name)
+    {
+        int x=-1;
+        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select `quantity` from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_name`=\""+seller_name+"\";");
+            if(rs.next())
+                x=rs.getInt("quantity");
+        }
+        catch(Exception e){e.printStackTrace();}
+        try{conn.close();}catch(Exception e){e.printStackTrace();}
+        return x;
+    }
+    public int getBuyerQuantity(String buyer_name)
+    {
+        int x=-1;
+        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select `quantity` from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_name`=\""+buyer_name+"\";");
+            if(rs.next())
+                x=rs.getInt("quantity");
+        }
+        catch(Exception e){e.printStackTrace();}
+        try{conn.close();}catch(Exception e){e.printStackTrace();}
+        return x;
     }
 }

@@ -39,6 +39,7 @@ public class CustomerHistory extends javax.swing.JFrame {
     String myFileName;
     Vector<Transaction> transactions;
     JLabel sr_nos[],dates[],times[],customers[],items[],quantities[],rates[];
+    JLabel totalQuantity;
     public CustomerHistory() {
         initComponents();
         initComps();
@@ -46,6 +47,7 @@ public class CustomerHistory extends javax.swing.JFrame {
     
     public void initComps()
     {
+        totalQuantity=new JLabel();
         Vector<Seller> sellerlist=LoginPage.datop.getSellerList();
         for(int i=0;i<sellerlist.size();i++)
             jComboBox2.addItem(sellerlist.get(i).name);
@@ -470,7 +472,8 @@ public class CustomerHistory extends javax.swing.JFrame {
         {
             transactions=LoginPage.datop.getSellerWiseTransactions(jTextField1.getText(),jComboBox2.getSelectedItem().toString());
             gbc.gridwidth=1;
-            for(int i=0;i<transactions.size();i++)
+            int i=0;
+            for(i=0;i<transactions.size();i++)
             {
                 sr_nos[i]=new JLabel();
                 sr_nos[i].setFont(new java.awt.Font("Tahoma",0,20));
@@ -543,17 +546,29 @@ public class CustomerHistory extends javax.swing.JFrame {
                 gbc.insets=new Insets(0,0,15,0);
                 jPanel1.add(rates[i],gbc);
             }
+            String totquan=Integer.toString(LoginPage.datop.getSellerQuantity(jComboBox2.getSelectedItem().toString()));
+            totalQuantity.setFont(new java.awt.Font("Tahoma",1,20));
+            totalQuantity.setText(totquan);
+            totalQuantity.setPreferredSize(new java.awt.Dimension(112,40));
+            totalQuantity.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+            totalQuantity.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            gbc.gridx=5;
+            gbc.gridy=i+5;
+            gbc.insets=new Insets(0,0,15,10);
+            jPanel1.add(totalQuantity,gbc);
         }
         else
         {
             transactions=LoginPage.datop.getBuyerWiseTransactions(jTextField1.getText(),jComboBox2.getSelectedItem().toString());
             gbc.gridwidth=1;
-            for(int i=0;i<transactions.size();i++)
+            int i=0;
+            for(i=0;i<transactions.size();i++)
             {
                 sr_nos[i]=new JLabel();
                 sr_nos[i].setFont(new java.awt.Font("Tahoma",0,20));
                 sr_nos[i].setText(Integer.toString(i+1));
                 sr_nos[i].setPreferredSize(new java.awt.Dimension(82,40));
+                sr_nos[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 sr_nos[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=0;
                 gbc.gridy=i+5;
@@ -563,6 +578,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                 dates[i].setFont(new java.awt.Font("Tahoma",0,20));
                 dates[i].setText(transactions.get(i).date);
                 dates[i].setPreferredSize(new java.awt.Dimension(112,40));
+                dates[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 dates[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=1;
                 gbc.gridy=i+5;
@@ -572,6 +588,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                 times[i].setFont(new java.awt.Font("Tahoma",0,20));
                 times[i].setText(transactions.get(i).time);
                 times[i].setPreferredSize(new java.awt.Dimension(102,40));
+                times[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 times[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=2;
                 gbc.gridy=i+5;
@@ -581,6 +598,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                 customers[i].setFont(new java.awt.Font("Tahoma",0,20));
                 customers[i].setText(transactions.get(i).seller_code+"- "+transactions.get(i).seller_name);
                 customers[i].setPreferredSize(new java.awt.Dimension(302,40));
+                customers[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 customers[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=3;
                 gbc.gridy=i+5;
@@ -590,6 +608,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                 items[i].setFont(new java.awt.Font("Tahoma",0,20));
                 items[i].setText(transactions.get(i).item);
                 items[i].setPreferredSize(new java.awt.Dimension(202,40));
+                items[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 items[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=4;
                 gbc.gridy=i+5;
@@ -599,6 +618,7 @@ public class CustomerHistory extends javax.swing.JFrame {
                 quantities[i].setFont(new java.awt.Font("Tahoma",0,20));
                 quantities[i].setText(Integer.toString(transactions.get(i).quantity));
                 quantities[i].setPreferredSize(new java.awt.Dimension(112,40));
+                quantities[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 quantities[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=5;
                 gbc.gridy=i+5;
@@ -608,19 +628,30 @@ public class CustomerHistory extends javax.swing.JFrame {
                 rates[i].setFont(new java.awt.Font("Tahoma",0,20));
                 rates[i].setText(Integer.toString(transactions.get(i).rate));
                 rates[i].setPreferredSize(new java.awt.Dimension(122,40));
+                rates[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 rates[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
                 gbc.gridx=6;
                 gbc.gridy=i+5;
                 gbc.insets=new Insets(0,0,15,0);
                 jPanel1.add(rates[i],gbc);
             }
+            String totquan=Integer.toString(LoginPage.datop.getBuyerQuantity(jComboBox2.getSelectedItem().toString()));
+            totalQuantity.setFont(new java.awt.Font("Tahoma",1,20));
+            totalQuantity.setText(totquan);
+            totalQuantity.setPreferredSize(new java.awt.Dimension(112,40));
+            totalQuantity.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+            totalQuantity.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            gbc.gridx=5;
+            gbc.gridy=i+5;
+            gbc.insets=new Insets(0,0,15,10);
+            jPanel1.add(totalQuantity,gbc);
         }
         gbc.gridx=0;
-        gbc.gridy=transactions.size()+5;
+        gbc.gridy=transactions.size()+6;
         gbc.gridwidth=7;
         gbc.insets=new Insets(50,0,0,0);
         jPanel1.add(jButton4,gbc);
-        gbc.gridy=transactions.size()+6;
+        gbc.gridy=transactions.size()+7;
         gbc.insets=new Insets(30,0,50,0);
         jPanel1.add(jButton2,gbc);
         jPanel1.revalidate();
@@ -982,6 +1013,9 @@ public class CustomerHistory extends javax.swing.JFrame {
             jPanel1.remove(quantities[i]);
             jPanel1.remove(rates[i]);
         }
+        jPanel1.remove(totalQuantity);
+        jPanel1.revalidate();
+        jPanel1.repaint();
     }
     /**
      * @param args the command line arguments

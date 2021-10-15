@@ -66,14 +66,14 @@ public class AddEntry extends javax.swing.JFrame {
         jTextField6.setText(dtf.format(now));
         Vector<Seller> sellerlist=LoginPage.datop.getSellerList();
         for(int i=0;i<sellerlist.size();i++)
-            jComboBox2.addItem(sellerlist.get(i).name);
+            jComboBox3.addItem(sellerlist.get(i).name);
         Vector<Buyer> buyerlist=LoginPage.datop.getBuyerList();
         for(int i=0;i<buyerlist.size();i++)
-            jComboBox3.addItem(buyerlist.get(i).name);
+            jComboBox2.addItem(buyerlist.get(i).name);
         jComboBox1.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if(jComboBox1.getSelectedIndex()==1)
+                if(jComboBox1.getSelectedIndex()==0)
                 {
                     jLabel3.setText("Buyer:");
                     jLabel4.setText("Sellers:");
@@ -93,7 +93,7 @@ public class AddEntry extends javax.swing.JFrame {
                         sellerlist=LoginPage.datop.getSpecificSellerList(jTextField2.getText().trim().toUpperCase());
                     for(int i=0;i<sellerlist.size();i++)
                         jComboBox3.addItem(sellerlist.get(i).name);
-                    changeAllPartBoxes(1);
+                    changeAllPartBoxes(0);
                 }
                 else
                 {
@@ -115,14 +115,14 @@ public class AddEntry extends javax.swing.JFrame {
                         buyerlist=LoginPage.datop.getSpecificBuyerList(jTextField2.getText().trim().toUpperCase());
                     for(int i=0;i<buyerlist.size();i++)
                         jComboBox3.addItem(buyerlist.get(i).name);
-                    changeAllPartBoxes(0);
+                    changeAllPartBoxes(1);
                 }
             }
         });
     }
     public void changeAllPartBoxes(int a)
     {
-        if(a==0)
+        if(a==1)
         {
             for(int i=0;i<ind;i++)
             {
@@ -197,6 +197,8 @@ public class AddEntry extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jComboBox4 = new javax.swing.JComboBox<>();
         jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
 
         jDialog1.setTitle("Confirmation");
         jDialog1.setSize(new java.awt.Dimension(400, 300));
@@ -259,7 +261,7 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(jLabel2, gridBagConstraints);
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seller", "Buyer" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Buyer", "Seller" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -268,7 +270,7 @@ public class AddEntry extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Seller:");
+        jLabel3.setText("Buyer:");
         jLabel3.setPreferredSize(new java.awt.Dimension(100, 50));
         jLabel3.setRequestFocusEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -306,7 +308,7 @@ public class AddEntry extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Buyers:");
+        jLabel4.setText("Sellers:");
         jLabel4.setPreferredSize(new java.awt.Dimension(100, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -345,6 +347,11 @@ public class AddEntry extends javax.swing.JFrame {
 
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField3.setPreferredSize(new java.awt.Dimension(100, 50));
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField3KeyPressed(evt);
@@ -474,6 +481,16 @@ public class AddEntry extends javax.swing.JFrame {
 
         jTextField4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField4.setPreferredSize(new java.awt.Dimension(100, 50));
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 6;
@@ -556,6 +573,22 @@ public class AddEntry extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 30);
         jPanel1.add(jLabel16, gridBagConstraints);
 
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
+        jLabel17.setText("Quantity:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 30);
+        jPanel1.add(jLabel17, gridBagConstraints);
+
+        jLabel18.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
+        jLabel18.setText("0");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 30);
+        jPanel1.add(jLabel18, gridBagConstraints);
+
         jScrollPane1.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -622,7 +655,7 @@ public class AddEntry extends javax.swing.JFrame {
                 String text=partcode[selected].getText().trim().toUpperCase();
                 if(text.equals(""))
                 {
-                    if(jComboBox1.getSelectedIndex()==1)
+                    if(jComboBox1.getSelectedIndex()==0)
                     {
                         sellerlist=LoginPage.datop.getSellerList();
                         partname[selected].removeAllItems();
@@ -639,7 +672,7 @@ public class AddEntry extends javax.swing.JFrame {
                 }
                 else
                 {
-                    if(jComboBox1.getSelectedIndex()==1)
+                    if(jComboBox1.getSelectedIndex()==0)
                     {
                         sellerlist=LoginPage.datop.getSpecificSellerList(text);
                         partname[selected].removeAllItems();
@@ -712,7 +745,7 @@ public class AddEntry extends javax.swing.JFrame {
         partname[ind]=new JComboBox();
         partname[ind].setFont(new java.awt.Font("Tahoma",0,24));
         partname[ind].setPreferredSize(new java.awt.Dimension(300,50));
-        if(jComboBox1.getSelectedIndex()==1)
+        if(jComboBox1.getSelectedIndex()==0)
         {
             Vector<Seller> sellerlist=LoginPage.datop.getSellerList();
             for(int i=0;i<sellerlist.size();i++)
@@ -760,7 +793,32 @@ public class AddEntry extends javax.swing.JFrame {
         jPanel1.add(partratelabel[ind],gbc);
         partquantity[ind]=new JTextField();
         partquantity[ind].setFont(new java.awt.Font("Tahoma",0,24));
-        partquantity[ind].setPreferredSize(new java.awt.Dimension(100,50));;
+        partquantity[ind].setPreferredSize(new java.awt.Dimension(100,50));
+        partquantity[ind].addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                int total=0;
+                String temp=jTextField4.getText().trim();
+                if(!temp.equals(""))
+                   total+=Integer.parseInt(temp);
+                for(int i=0;i<ind;i++)
+                {
+                    temp=partquantity[i].getText();
+                    if(!temp.equals(""))
+                        total+=Integer.parseInt(temp);
+                }
+                jLabel18.setText(Integer.toString(total));
+            }
+            
+        });
         gbc.gridx=5;
         gbc.gridy=ind+ind+8;
         gbc.insets=new Insets(0,0,15,30);
@@ -863,7 +921,7 @@ public class AddEntry extends javax.swing.JFrame {
         String text=jTextField1.getText().trim().toUpperCase();
         if(text.equals(""))
         {
-            if(jComboBox1.getSelectedIndex()==0)
+            if(jComboBox1.getSelectedIndex()==1)
             {
                 sellerlist=LoginPage.datop.getSellerList();
                 jComboBox2.removeAllItems();
@@ -880,7 +938,7 @@ public class AddEntry extends javax.swing.JFrame {
         }
         else
         {
-            if(jComboBox1.getSelectedIndex()==0)
+            if(jComboBox1.getSelectedIndex()==1)
             {
                 sellerlist=LoginPage.datop.getSpecificSellerList(text);
                 jComboBox2.removeAllItems();
@@ -904,7 +962,7 @@ public class AddEntry extends javax.swing.JFrame {
         String text=jTextField2.getText().trim().toUpperCase();
         if(text.equals(""))
         {
-            if(jComboBox1.getSelectedIndex()==1)
+            if(jComboBox1.getSelectedIndex()==0)
             {
                 sellerlist=LoginPage.datop.getSellerList();
                 jComboBox3.removeAllItems();
@@ -921,7 +979,7 @@ public class AddEntry extends javax.swing.JFrame {
         }
         else
         {
-            if(jComboBox1.getSelectedIndex()==1)
+            if(jComboBox1.getSelectedIndex()==0)
             {
                 sellerlist=LoginPage.datop.getSpecificSellerList(text);
                 jComboBox3.removeAllItems();
@@ -1017,7 +1075,7 @@ public class AddEntry extends javax.swing.JFrame {
         Buyer mainbuyer;
         Vector<String> items=new Vector<String>();
         Vector<String> rate=new Vector<String>();
-        if(jComboBox1.getSelectedIndex()==0)
+        if(jComboBox1.getSelectedIndex()==1)
         {
             mainseller=new Seller(jTextField1.getText().trim().toUpperCase(),jComboBox2.getSelectedItem().toString(),0);
             finalbuyerlist.add(new Buyer(jTextField2.getText().trim().toUpperCase(),jComboBox3.getSelectedItem().toString(),Integer.parseInt(jTextField4.getText().trim())));
@@ -1128,6 +1186,29 @@ public class AddEntry extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField3KeyReleased
 
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
+        // TODO add your handling code here:
+        int total=0;
+        String temp=jTextField4.getText().trim();
+        if(!temp.equals(""))
+           total+=Integer.parseInt(temp);
+        for(int i=0;i<ind;i++)
+        {
+            temp=partquantity[i].getText();
+            if(!temp.equals(""))
+                total+=Integer.parseInt(temp);
+        }
+        jLabel18.setText(Integer.toString(total));
+    }//GEN-LAST:event_jTextField4KeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -1183,6 +1264,8 @@ public class AddEntry extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
