@@ -32,6 +32,7 @@ public class BrokerHistory extends javax.swing.JFrame {
     JLabel totalQuantity;
     JButton edits[];
     int selected;
+    int displayed=0;
     public BrokerHistory() {
         initComponents();
         initComps();
@@ -53,12 +54,21 @@ public class BrokerHistory extends javax.swing.JFrame {
         quantities=new JLabel[transactionsToDisplay.size()];
         rates=new JLabel[transactionsToDisplay.size()];
         edits=new JButton[transactionsToDisplay.size()];
+        jButton9.setVisible(false);
+        if(displayed+100>=transactionsToDisplay.size())
+            jButton10.setVisible(false);
         showDisplay();
         jComboBox1.addItemListener(new ItemListener(){
             @Override
             public void itemStateChanged(ItemEvent e) {
                 deleteDisplay();
                 transactionsToDisplay=LoginPage.datop.getTransactions(jComboBox1.getSelectedItem().toString().toLowerCase());
+                displayed=0;
+                if(displayed+100>=transactionsToDisplay.size())
+                    jButton10.setVisible(false);
+                else
+                    jButton10.setVisible(true);
+                jButton9.setVisible(false);
                 showDisplay();
             }
             
@@ -71,7 +81,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         GridBagConstraints gbc=new GridBagConstraints();
         gbc.gridwidth=1;
         int i=0;
-        for(i=0;i<transactionsToDisplay.size();i++)
+        for(i=displayed;i<displayed+100&&i<transactionsToDisplay.size();i++)
         {
             sr_nos[i]=new JLabel();
             sr_nos[i].setFont(new java.awt.Font("Tahoma",0,20));
@@ -219,6 +229,16 @@ public class BrokerHistory extends javax.swing.JFrame {
         gbc.gridx=0;
         gbc.gridy=i+4;
         gbc.gridwidth=9;
+        gbc.insets=new Insets(60,-300,0,0);
+        jPanel1.add(jButton9,gbc);
+        gbc.gridx=0;
+        gbc.gridy=i+4;
+        gbc.gridwidth=9;
+        gbc.insets=new Insets(60,300,0,0);
+        jPanel1.add(jButton10,gbc);
+        gbc.gridx=0;
+        gbc.gridy=i+5;
+        gbc.gridwidth=9;
         gbc.insets=new Insets(50,0,50,0);
         jPanel1.add(jButton2,gbc);
         jPanel1.revalidate();
@@ -227,7 +247,7 @@ public class BrokerHistory extends javax.swing.JFrame {
     
     public void deleteDisplay()
     {
-        for(int i=0;i<transactionsToDisplay.size();i++)
+        for(int i=displayed;i<displayed+100&&i<transactionsToDisplay.size();i++)
         {
             jPanel1.remove(sr_nos[i]);
             jPanel1.remove(dates[i]);
@@ -303,6 +323,8 @@ public class BrokerHistory extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
 
         jDialog1.setTitle("Delete Transaction History");
         jDialog1.setSize(new java.awt.Dimension(750, 300));
@@ -739,7 +761,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 9;
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 50, 0);
         jPanel1.add(jButton2, gridBagConstraints);
@@ -762,6 +784,34 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 100, 0);
         jPanel1.add(jButton3, gridBagConstraints);
+
+        jButton9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton9.setText("Previous");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.insets = new java.awt.Insets(60, -300, 0, 0);
+        jPanel1.add(jButton9, gridBagConstraints);
+
+        jButton10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton10.setText("Next");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.insets = new java.awt.Insets(60, 300, 0, 0);
+        jPanel1.add(jButton10, gridBagConstraints);
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -942,6 +992,26 @@ public class BrokerHistory extends javax.swing.JFrame {
             jButton8.doClick();
     }//GEN-LAST:event_jDialog4KeyPressed
 
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+        deleteDisplay();
+        displayed+=100;
+        if(displayed+100>=transactionsToDisplay.size())
+            jButton10.setVisible(false);
+        jButton9.setVisible(true);
+        showDisplay();
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        deleteDisplay();
+        displayed-=100;
+        if(displayed==0)
+            jButton9.setVisible(false);
+        jButton10.setVisible(true);
+        showDisplay();
+    }//GEN-LAST:event_jButton9ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -979,6 +1049,7 @@ public class BrokerHistory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -986,6 +1057,7 @@ public class BrokerHistory extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;

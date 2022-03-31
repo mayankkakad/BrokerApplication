@@ -892,4 +892,88 @@ public class DatabaseOperations {
         try{conn.close();}catch(Exception e){e.printStackTrace();}
         return x;
     }
+    
+    public Vector<Transaction> getBuyerTransactions(String buyer_code,String buyer_name)
+    {
+        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+        Vector<Transaction> transactions=new Vector<Transaction>();
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_code`=\""+buyer_code+"\" and `buyer_name`=\""+buyer_name+"\";");
+            while(rs.next())
+                transactions.add(new Transaction(rs.getString("date"),rs.getString("time"),rs.getString("seller_code"),rs.getString("seller_name"),rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getString("item"),rs.getInt("quantity"),rs.getInt("rate")));
+        }
+        catch(Exception e){
+        e.printStackTrace();}
+        try{conn.close();}catch(Exception e){e.printStackTrace();}
+        return transactions;
+    }
+    
+    public Vector<Transaction> getSellerTransactions(String seller_code,String seller_name)
+    {
+        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+        Vector<Transaction> transactions=new Vector<Transaction>();
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code`=\""+seller_code+"\" and `seller_name`=\""+seller_name+"\";");
+            while(rs.next())
+                transactions.add(new Transaction(rs.getString("date"),rs.getString("time"),rs.getString("seller_code"),rs.getString("seller_name"),rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getString("item"),rs.getInt("quantity"),rs.getInt("rate")));
+        }
+        catch(Exception e){
+        e.printStackTrace();}
+        try{conn.close();}catch(Exception e){e.printStackTrace();}
+        return transactions;
+    }
+    
+    public void filterDatabase() {
+        try
+        {
+            try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `buyerdata`;");
+            Vector<Buyer> blist=new Vector<>();
+            while(rs.next()) {
+                blist.add(new Buyer(rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getInt("quantity")));
+            }
+            try{conn.close();}catch(Exception e){e.printStackTrace();}
+            for(int j=0;j<blist.size();j++) {
+                Vector<Transaction> buyertrans=getBuyerTransactions(blist.get(j).code,blist.get(j).name);
+                int total=0;
+                for(int i=0;i<buyertrans.size();i++) {
+                    total+=buyertrans.get(i).quantity;
+                }
+                if(blist.get(j).quantity!=total) {
+                    try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+                    st=conn.createStatement();
+                    st.executeUpdate("update `buyerdata` set `quantity`="+total+" where `buyer_code`=\""+blist.get(j).code+"\" and `buyer_name`=\""+blist.get(j).name+"\";");
+                    try{conn.close();}catch(Exception e){e.printStackTrace();}
+                }
+            }
+            
+            try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `sellerdata`;");
+            Vector<Seller> slist=new Vector<>();
+            while(rs.next()) {
+                slist.add(new Seller(rs.getString("seller_code"),rs.getString("seller_name"),rs.getInt("quantity")));
+            }
+            try{conn.close();}catch(Exception e){e.printStackTrace();}
+            for(int j=0;j<slist.size();j++) {
+                Vector<Transaction> sellertrans=getSellerTransactions(slist.get(j).code,slist.get(j).name);
+                int total=0;
+                for(int i=0;i<sellertrans.size();i++) {
+                    total+=sellertrans.get(i).quantity;
+                }
+                if(slist.get(j).quantity!=total) {
+                    try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+                    st=conn.createStatement();
+                    st.executeUpdate("update `sellerdata` set `quantity`="+total+" where `seller_code`=\""+slist.get(j).code+"\" and `seller_name`=\""+slist.get(j).name+"\";");
+                    try{conn.close();}catch(Exception e){e.printStackTrace();}
+                }
+            }
+        }
+        catch(Exception e){e.printStackTrace();}
+    }
 }

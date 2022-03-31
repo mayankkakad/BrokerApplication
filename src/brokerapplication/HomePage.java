@@ -69,6 +69,7 @@ public class HomePage extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
 
         jDialog1.setTitle("Brokerage Bill");
         jDialog1.setSize(new java.awt.Dimension(400, 300));
@@ -151,7 +152,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 30);
         getContentPane().add(jButton1, gridBagConstraints);
 
@@ -170,7 +171,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(30, 30, 0, 0);
         getContentPane().add(jButton2, gridBagConstraints);
 
@@ -189,7 +190,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 30);
         getContentPane().add(jButton3, gridBagConstraints);
 
@@ -208,7 +209,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(30, 30, 0, 0);
         getContentPane().add(jButton4, gridBagConstraints);
 
@@ -227,7 +228,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(60, 0, 0, 0);
         getContentPane().add(jButton5, gridBagConstraints);
@@ -259,7 +260,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(30, 30, 0, 0);
         getContentPane().add(jButton6, gridBagConstraints);
 
@@ -278,7 +279,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 30);
         getContentPane().add(jButton7, gridBagConstraints);
 
@@ -297,7 +298,7 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(30, 30, 0, 0);
         getContentPane().add(jButton8, gridBagConstraints);
 
@@ -316,9 +317,22 @@ public class HomePage extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 0, 30);
         getContentPane().add(jButton11, gridBagConstraints);
+
+        jButton13.setText("Filter Database");
+        jButton13.setToolTipText("");
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        getContentPane().add(jButton13, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -640,17 +654,34 @@ public class HomePage extends javax.swing.JFrame {
                 FileOutputStream fos=new FileOutputStream(new File(filename));
                 XWPFParagraph para1=doc.createParagraph();
                 para1.setAlignment(ParagraphAlignment.CENTER);
-                for(int j=0;j<leftlines.length&&j<rightlines.length;j++)
+                for(int j=0;j<leftlines.length||j<rightlines.length;j++)
                 {
-                    XWPFRun left=para1.createRun();
-                    left.setFontFamily("Calibri");
-                    left.setFontSize(14);
-                    left.setText(leftlines[j]+"\t\t\t\t\t\t\t");
-                    XWPFRun right=para1.createRun();
-                    right.setFontFamily("Calibri");
-                    right.setFontSize(14);
-                    right.setText(rightlines[j]);
-                    right.addBreak();
+                    if(j<leftlines.length) {
+                        XWPFRun left=para1.createRun();
+                        left.setFontFamily("Calibri");
+                        left.setFontSize(14);
+                        left.setText(leftlines[j]+"\t\t\t\t\t");
+                    }
+                    else {
+                        XWPFRun left=para1.createRun();
+                        left.setFontFamily("Calibri");
+                        left.setFontSize(14);
+                        left.setText("\t\t\t\t\t\t\t");
+                    }
+                    if(j<rightlines.length) {
+                        XWPFRun right=para1.createRun();
+                        right.setFontFamily("Calibri");
+                        right.setFontSize(14);
+                        right.setText(rightlines[j]);
+                        right.addBreak();
+                    }
+                    else {
+                        XWPFRun right=para1.createRun();
+                        right.setFontFamily("Calibri");
+                        right.setFontSize(14);
+                        right.setText("\t\t\t\t");
+                        right.addBreak();
+                    }
                 }
                 XWPFParagraph para2=doc.createParagraph();
                 para2.setAlignment(ParagraphAlignment.CENTER);
@@ -819,6 +850,12 @@ public class HomePage extends javax.swing.JFrame {
             jButton12.doClick();
     }//GEN-LAST:event_jButton12KeyPressed
 
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        // TODO add your handling code here:
+        LoginPage.datop.filterDatabase();
+        JOptionPane.showMessageDialog(null,"Database FIltered","Successful",JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton13ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -859,6 +896,7 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
