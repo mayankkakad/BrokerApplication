@@ -61,9 +61,7 @@ public class AddEntry extends javax.swing.JFrame {
         itemlist=LoginPage.datop.getItems();
         for(int i=0;i<itemlist.size();i++)
             jComboBox4.addItem(itemlist.get(i).name);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDateTime now = LocalDateTime.now();
-        jTextField6.setText(dtf.format(now));
+        jTextField6.setText(HomePage.date);
         Vector<Seller> sellerlist=LoginPage.datop.getSellerList();
         for(int i=0;i<sellerlist.size();i++)
             jComboBox3.addItem(sellerlist.get(i).name);
@@ -281,6 +279,11 @@ public class AddEntry extends javax.swing.JFrame {
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
         jTextField1.setPreferredSize(new java.awt.Dimension(100, 50));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField1KeyPressed(evt);
@@ -523,6 +526,11 @@ public class AddEntry extends javax.swing.JFrame {
         jTextField6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTextField6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField6.setPreferredSize(new java.awt.Dimension(135, 43));
+        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField6ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
@@ -1208,6 +1216,14 @@ public class AddEntry extends javax.swing.JFrame {
         }
         jLabel18.setText(Integer.toString(total));
     }//GEN-LAST:event_jTextField4KeyReleased
+
+    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField6ActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments

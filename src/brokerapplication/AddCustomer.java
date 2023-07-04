@@ -520,7 +520,7 @@ public class AddCustomer extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         boolean flag=true;
-        if(jTextField2.getText().equals(""))
+        if(jTextField2.getText().trim().equals(""))
         {
             JOptionPane.showMessageDialog(null,"Name can't be empty", "Error: Invalid input", JOptionPane.ERROR_MESSAGE);
             jTextField2.requestFocus();
@@ -530,7 +530,7 @@ public class AddCustomer extends javax.swing.JFrame {
         {
             for(int i=0;i<count;i++)
             {
-                if(namefield[i].getText().equals(""))
+                if(namefield[i].getText().trim().equals(""))
                 {
                     JOptionPane.showMessageDialog(null,"Name can't be empty", "Error: Invalid input", JOptionPane.ERROR_MESSAGE);
                     namefield[i].requestFocus();
@@ -549,31 +549,31 @@ public class AddCustomer extends javax.swing.JFrame {
             Vector<Integer> buyerindex=new Vector<Integer>();
             String t=null;
             String t2=null;
-            if(jTextField1.getText().equals(""))
+            if(jTextField1.getText().trim().equals(""))
                 t=null;
             else
-                t=jTextField1.getText().toUpperCase();
-            if(jTextField3.getText().equals(""))
+                t=jTextField1.getText().trim().toUpperCase();
+            if(jTextField3.getText().trim().equals(""))
                 t2=null;
             else
-                t2=jTextField3.getText().toUpperCase();
+                t2=jTextField3.getText().trim().toUpperCase();
             if(jComboBox1.getSelectedItem().toString().equals("Seller"))
             {
-                sellerlist.add(new Seller(t,jTextField2.getText().toUpperCase(),0));
+                sellerlist.add(new Seller(t,jTextField2.getText().trim().toUpperCase(),0));
                 sellerplacelist.add(t2);
                 sellerindex.add(-1);
             }
             else if(jComboBox1.getSelectedItem().toString().equals("Buyer"))
             {
-                buyerlist.add(new Buyer(t,jTextField2.getText().toUpperCase(),0));
+                buyerlist.add(new Buyer(t,jTextField2.getText().trim().toUpperCase(),0));
                 buyerplacelist.add(t2);
                 buyerindex.add(-1);
             }
             else
             {
-                sellerlist.add(new Seller(t,jTextField2.getText().toUpperCase(),0));
+                sellerlist.add(new Seller(t,jTextField2.getText().trim().toUpperCase(),0));
                 sellerplacelist.add(t2);
-                buyerlist.add(new Buyer(t,jTextField2.getText().toUpperCase(),0));
+                buyerlist.add(new Buyer(t,jTextField2.getText().trim().toUpperCase(),0));
                 buyerplacelist.add(t2);
                 sellerindex.add(-1);
                 buyerindex.add(-1);
@@ -582,31 +582,31 @@ public class AddCustomer extends javax.swing.JFrame {
             {
                 String temp=null;
                 String temp2=null;
-                if(codefield[i].getText().equals(""))
+                if(codefield[i].getText().trim().equals(""))
                     temp=null;
                 else
-                    temp=codefield[i].getText().toUpperCase();
+                    temp=codefield[i].getText().trim().toUpperCase();
                 if(placefield[i].getText().equals(""))
                     temp2=null;
                 else
-                    temp2=placefield[i].getText().toUpperCase();
+                    temp2=placefield[i].getText().trim().toUpperCase();
                 if(typebox[i].getSelectedItem().toString().equals("Seller"))
                 {
-                    sellerlist.add(new Seller(temp,namefield[i].getText().toUpperCase(),0));
+                    sellerlist.add(new Seller(temp,namefield[i].getText().trim().toUpperCase(),0));
                     sellerplacelist.add(temp2);
                     sellerindex.add(i);
                 }
                 else if(typebox[i].getSelectedItem().toString().equals("Buyer"))
                 {
-                    buyerlist.add(new Buyer(temp,namefield[i].getText().toUpperCase(),0));
+                    buyerlist.add(new Buyer(temp,namefield[i].getText().trim().toUpperCase(),0));
                     buyerplacelist.add(temp2);
                     buyerindex.add(i);
                 }
                 else
                 {
-                    sellerlist.add(new Seller(temp,namefield[i].getText().toUpperCase(),0));
+                    sellerlist.add(new Seller(temp,namefield[i].getText().trim().toUpperCase(),0));
                     sellerplacelist.add(temp2);
-                    buyerlist.add(new Buyer(temp,namefield[i].getText().toUpperCase(),0));
+                    buyerlist.add(new Buyer(temp,namefield[i].getText().trim().toUpperCase(),0));
                     buyerplacelist.add(temp2);
                     sellerindex.add(i);
                     buyerindex.add(i);

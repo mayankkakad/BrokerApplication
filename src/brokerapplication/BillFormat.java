@@ -26,12 +26,36 @@ public class BillFormat extends javax.swing.JFrame {
         Bill b=LoginPage.datop.getBillFormat();
         if(b!=null)
         {
-            jTextArea1.setText(b.left);
-            jTextArea2.setText(b.right);
-            jTextField1.setText(b.broker_name);
+            int ind = b.broker_name.length();
+            if(b.broker_name.contains(";;@@##$$"))
+                ind = b.broker_name.indexOf(";;@@##$$");
+            String bname = b.broker_name.substring(0, ind);
+            if(ind == b.broker_name.length())
+                ind -= 8;
+            String bsubname = b.broker_name.substring(ind+8);
+            if(b.left.contains(";;@@##$$")) {
+                String leftheader = b.left.substring(b.left.indexOf(";;@@##$$") + 8);
+                String leftmain = b.left.substring(0, b.left.indexOf(";;@@##$$"));
+                jTextField6.setText(leftheader);
+                jTextArea1.setText(leftmain);
+            }
+            else {
+                jTextArea1.setText(b.left);
+            }
+            if(b.right.contains(";;@@##$$")) {
+                String rightheader = b.right.substring(b.right.indexOf(";;@@##$$") + 8);
+                String rightmain = b.right.substring(0, b.right.indexOf(";;@@##$$"));
+                jTextField7.setText(rightheader);
+                jTextArea2.setText(rightmain);
+            }
+            else {
+                jTextArea2.setText(b.right);
+            }
+            jTextField1.setText(bname);
             jTextField2.setText(b.broker_address);
             jTextField3.setText(b.bill_title);
             jTextField4.setText(b.bill_period);
+            jTextField5.setText(bsubname);
         }
     }
 
@@ -60,6 +84,9 @@ public class BillFormat extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jTextField5 = new javax.swing.JTextField();
+        jTextField6 = new javax.swing.JTextField();
+        jTextField7 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bill Format");
@@ -87,7 +114,7 @@ public class BillFormat extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 400);
         jPanel1.add(jScrollPane2, gridBagConstraints);
 
@@ -98,7 +125,7 @@ public class BillFormat extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 0);
         jPanel1.add(jScrollPane3, gridBagConstraints);
 
@@ -107,7 +134,7 @@ public class BillFormat extends javax.swing.JFrame {
         jTextField1.setPreferredSize(new java.awt.Dimension(600, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel1.add(jTextField1, gridBagConstraints);
@@ -117,7 +144,7 @@ public class BillFormat extends javax.swing.JFrame {
         jTextField2.setPreferredSize(new java.awt.Dimension(1000, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 30, 0);
         jPanel1.add(jTextField2, gridBagConstraints);
@@ -127,7 +154,7 @@ public class BillFormat extends javax.swing.JFrame {
         jTextField3.setPreferredSize(new java.awt.Dimension(300, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
         jPanel1.add(jTextField3, gridBagConstraints);
@@ -137,7 +164,7 @@ public class BillFormat extends javax.swing.JFrame {
         jTextField4.setPreferredSize(new java.awt.Dimension(600, 50));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         jPanel1.add(jTextField4, gridBagConstraints);
 
@@ -145,7 +172,7 @@ public class BillFormat extends javax.swing.JFrame {
         jLabel3.setText("*****Content*****");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(70, 0, 0, 0);
         jPanel1.add(jLabel3, gridBagConstraints);
@@ -182,7 +209,7 @@ public class BillFormat extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(30, 0, 50, 0);
         jPanel1.add(jButton2, gridBagConstraints);
@@ -201,10 +228,42 @@ public class BillFormat extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 0);
         jPanel1.add(jButton3, gridBagConstraints);
+
+        jTextField5.setFont(new java.awt.Font("Tahoma", 1, 30)); // NOI18N
+        jTextField5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField5.setToolTipText("");
+        jTextField5.setPreferredSize(new java.awt.Dimension(400, 50));
+        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField5ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+        jPanel1.add(jTextField5, gridBagConstraints);
+
+        jTextField6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField6.setPreferredSize(new java.awt.Dimension(312, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 400);
+        jPanel1.add(jTextField6, gridBagConstraints);
+
+        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField7.setPreferredSize(new java.awt.Dimension(312, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
+        jPanel1.add(jTextField7, gridBagConstraints);
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -234,9 +293,48 @@ public class BillFormat extends javax.swing.JFrame {
         HomePage.bf.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    String deleteExtraSpaces(String s) {
+        s = s.trim();
+        boolean last_space = false;
+        int n = s.length();
+        for(int i = 0; i < n; i++) {
+            if(last_space == true && s.charAt(i) == ' ') {
+                s = s.substring(0,i) + s.substring(i + 1);
+                n--;
+                i--;
+                continue;
+            }
+            if(s.charAt(i) == ' ')
+                last_space = true;
+            else
+                last_space = false;
+        }
+        return s;
+    }
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        LoginPage.datop.billFormat(jTextArea1.getText(),jTextArea2.getText(),jTextField1.getText(),jTextField2.getText(),jTextField3.getText(),jTextField4.getText());
+        String[] lines1 = jTextArea1.getText().split("\n");
+        for(int i = 0; i < lines1.length; i++)
+            lines1[i] = deleteExtraSpaces(lines1[i]);
+        String[] lines2 = jTextArea2.getText().split("\n");
+        for(int i = 0; i < lines2.length; i++)
+            lines2[i] = deleteExtraSpaces(lines2[i]);
+        String leftText = "";
+        for(int i = 0; i < lines1.length; i++) {
+            if(i == lines1.length - 1)
+                leftText += lines1[i];
+            else
+                leftText += lines1[i] + "\n";
+        }
+        String rightText = "";
+        for(int i = 0; i < lines2.length; i++) {
+            if(i == lines2.length - 1)
+                rightText += lines2[i];
+            else
+                rightText += lines2[i] + "\n";
+        }
+        LoginPage.datop.billFormat(leftText + ";;@@##$$" + jTextField6.getText(),rightText + ";;@@##$$" + jTextField7.getText(),jTextField1.getText() + ";;@@##$$" + jTextField5.getText(),jTextField2.getText(),jTextField3.getText(),jTextField4.getText());
         LoginPage.hp.setVisible(true);
         HomePage.bf.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -264,6 +362,10 @@ public class BillFormat extends javax.swing.JFrame {
         if(evt.getKeyChar()=='\n')
             jButton3.doClick();
     }//GEN-LAST:event_jPanel1KeyPressed
+
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -316,5 +418,8 @@ public class BillFormat extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
+    private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables
 }

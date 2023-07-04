@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
@@ -20,6 +21,9 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.apache.poi.xwpf.usermodel.XWPFHeader;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 
 /**
  *
@@ -37,10 +41,15 @@ public class HomePage extends javax.swing.JFrame {
     static CustomerHistory ch;
     static BillFormat bf;
     static ItemsList il;
+    static String date = null;
     public HomePage() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDateTime now = LocalDateTime.now();
+        date = dtf.format(now);
         initComponents();
         String name=LoginPage.datop.getName(LoginPage.loggedInUser);
         jLabel2.setText("Hi, "+name+"!");
+        jTextField1.setText(date);
     }
 
     /**
@@ -59,6 +68,13 @@ public class HomePage extends javax.swing.JFrame {
         jDialog2 = new javax.swing.JDialog();
         jLabel1 = new javax.swing.JLabel();
         jButton12 = new javax.swing.JButton();
+        jDialog3 = new javax.swing.JDialog();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton14 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -70,6 +86,7 @@ public class HomePage extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         jDialog1.setTitle("Brokerage Bill");
         jDialog1.setSize(new java.awt.Dimension(400, 300));
@@ -132,6 +149,71 @@ public class HomePage extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(50, 0, 0, 0);
         jDialog2.getContentPane().add(jButton12, gridBagConstraints);
+
+        jDialog3.setTitle("Select Buyers/Sellers");
+        jDialog3.setSize(new java.awt.Dimension(600, 250));
+        jDialog3.getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Buyer:");
+        jLabel3.setPreferredSize(new java.awt.Dimension(100, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 30);
+        jDialog3.getContentPane().add(jLabel3, gridBagConstraints);
+
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
+        jTextField2.setPreferredSize(new java.awt.Dimension(100, 50));
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 30);
+        jDialog3.getContentPane().add(jTextField2, gridBagConstraints);
+
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jComboBox1.setPreferredSize(new java.awt.Dimension(300, 50));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 0);
+        jDialog3.getContentPane().add(jComboBox1, gridBagConstraints);
+
+        jButton14.setFont(new java.awt.Font("Tahoma", 0, 27)); // NOI18N
+        jButton14.setText("Done");
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        jDialog3.getContentPane().add(jButton14, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        jLabel4.setText("Code");
+        jLabel4.setPreferredSize(new java.awt.Dimension(100, 25));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 30);
+        jDialog3.getContentPane().add(jLabel4, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        jLabel5.setText("Name");
+        jLabel5.setPreferredSize(new java.awt.Dimension(300, 25));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jDialog3.getContentPane().add(jLabel5, gridBagConstraints);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Home Page");
@@ -331,8 +413,14 @@ public class HomePage extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
         getContentPane().add(jButton13, gridBagConstraints);
+
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextField1.setPreferredSize(new java.awt.Dimension(135, 43));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        getContentPane().add(jTextField1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -431,6 +519,7 @@ public class HomePage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        HomePage.date = jTextField1.getText();
         ae=new AddEntry();
         ae.setExtendedState(JFrame.MAXIMIZED_BOTH);
         ae.setVisible(true);
@@ -455,163 +544,29 @@ public class HomePage extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
-        try
+        jDialog1.setVisible(false);
+        jLabel3.setText("Seller:");
+        int xco=(LoginPage.hp.getWidth()-jDialog3.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog3.getHeight())/2;
+        jDialog3.setBounds(xco,yco,jDialog3.getWidth(),jDialog3.getHeight());
+        jTextField2.setText("");
+        if(jLabel3.getText().equalsIgnoreCase("Seller:"))
         {
             Vector<Seller> sellerlist=LoginPage.datop.getSellerList();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
-            LocalDateTime now = LocalDateTime.now();
-            String datetime=dtf.format(now);
-            File file=new File(LoginPage.loggedInUser+" Sellerwise Brokerage Bills");
-            file.mkdir();
-            Bill b=LoginPage.datop.getBillFormat();
-            if(b==null)
-            {
-                JOptionPane.showMessageDialog(null,"Bill Format not yet set","Error: invalid input",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String leftlines[]=b.left.split("\n");
-            String rightlines[]=b.right.split("\n");
+            jComboBox1.removeAllItems();
+            jComboBox1.addItem("All");
             for(int i=0;i<sellerlist.size();i++)
-            {
-                Vector<Transaction> temp;
-                String filename=LoginPage.loggedInUser+" Sellerwise Brokerage Bills\\"+sellerlist.get(i).name+" "+datetime+".docx";
-                XWPFDocument doc=new XWPFDocument();
-                FileOutputStream fos=new FileOutputStream(new File(filename));
-                XWPFParagraph para1=doc.createParagraph();
-                para1.setAlignment(ParagraphAlignment.CENTER);
-                for(int j=0;j<leftlines.length&&j<rightlines.length;j++)
-                {
-                    XWPFRun left=para1.createRun();
-                    left.setFontFamily("Calibri");
-                    left.setFontSize(14);
-                    left.setText(leftlines[j]+"\t\t\t\t\t\t\t");
-                    XWPFRun right=para1.createRun();
-                    right.setFontFamily("Calibri");
-                    right.setFontSize(14);
-                    right.setText(rightlines[j]);
-                    right.addBreak();
-                }
-                XWPFParagraph para2=doc.createParagraph();
-                para2.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun name=para2.createRun();
-                name.setFontFamily("Calibri");
-                name.setBold(true);
-                name.setFontSize(18);
-                name.setText(b.broker_name);
-                name.addBreak();
-                XWPFRun address=para2.createRun();
-                address.setFontFamily("Calibri");
-                address.setFontSize(14);
-                address.setText(b.broker_address);
-                address.addBreak();
-                XWPFParagraph para3=doc.createParagraph();
-                para3.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun title=para3.createRun();
-                title.setFontFamily("Calibri");
-                title.setFontSize(16);
-                title.setBold(true);
-                title.setText(b.bill_title);
-                title.addBreak();
-                XWPFRun period=para3.createRun();
-                period.setFontFamily("Calibri");
-                period.setFontSize(14);
-                period.setText(b.bill_period);
-                period.addBreak();
-                temp=LoginPage.datop.getSellerWiseTransactions(sellerlist.get(i).code,sellerlist.get(i).name);
-                if(temp.size()==0)
-                {
-                    doc.write(fos);
-                    fos.close();
-                    File f=new File(filename);
-                    f.delete();
-                    continue;
-                }
-                XWPFParagraph sellerName=doc.createParagraph();
-                sellerName.setAlignment(ParagraphAlignment.LEFT);
-                XWPFRun myRun=sellerName.createRun();
-                myRun.setFontFamily("Calibri");
-                myRun.setFontSize(12);
-                myRun.setBold(true);
-                myRun.setText("SELLER:\t"+temp.get(0).seller_name);
-                myRun.addBreak();
-                XWPFRun mySecondRun=sellerName.createRun();
-                mySecondRun.setFontFamily("Calibri");
-                mySecondRun.setFontSize(12);
-                mySecondRun.setBold(true);
-                mySecondRun.setText(LoginPage.datop.getSellerPlace(temp.get(0).seller_code,temp.get(0).seller_name));
-                XWPFTable table=doc.createTable();
-                XWPFTableRow row1=table.getRow(0);
-                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(5000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                XWPFRun rowcell[]=new XWPFRun[5];
-                for(int j=0;j<rowcell.length;j++)
-                {
-                    row1.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-                    row1.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
-                    rowcell[j]=row1.getCell(j).getParagraphs().get(0).createRun();
-                    rowcell[j].setBold(true);
-                    rowcell[j].setFontFamily("Calibri");
-                    rowcell[j].setFontSize(12);
-                }
-                rowcell[0].setText("DATE");
-                rowcell[1].setText("BUYER");
-                rowcell[2].setText("ITEM");
-                rowcell[3].setText("QUANTITY");
-                rowcell[4].setText("RATE");
-                for(int j=0;j<temp.size();j++)
-                {
-                    XWPFTableRow rowj=table.createRow();
-                    XWPFRun rowcellj[]=new XWPFRun[5];
-                    for(int k=0;k<rowcellj.length;k++)
-                    {
-                        rowj.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-                        if(k==1)
-                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
-                        else
-                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
-                        rowcellj[k]=rowj.getCell(k).getParagraphs().get(0).createRun();
-                        rowcellj[k].setFontFamily("Calibri");
-                        rowcellj[k].setFontSize(12);
-                    }
-                    rowcellj[0].setText(temp.get(j).date);
-                    rowcellj[1].setText(temp.get(j).buyer_name);
-                    rowcellj[2].setText(temp.get(j).item);
-                    rowcellj[3].setText(Integer.toString(temp.get(j).quantity));
-                    rowcellj[4].setText(Integer.toString(temp.get(j).rate));
-                }
-                XWPFTableRow lastRow=table.createRow();
-                XWPFRun lastrowcells[]=new XWPFRun[5];
-                for(int k=0;k<lastrowcells.length;k++)
-                {
-                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-                    if(k==1)
-                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
-                    else
-                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
-                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
-                    lastrowcells[k].setFontFamily("Calibri");
-                    lastrowcells[k].setFontSize(12);
-                }
-                lastrowcells[1].setBold(true);
-                lastrowcells[1].setText(temp.get(0).seller_name+" Total");
-                lastrowcells[3].setBold(true);
-                lastrowcells[3].setText(getTotalQuantity(temp));
-                //lastrowcells[4].setBold(true);
-                //lastrowcells[4].setText(getTotalRate(temp));
-                doc.write(fos);
-                fos.close();
-            }
+                jComboBox1.addItem(sellerlist.get(i).name);
         }
-        catch(Exception e){
-        e.printStackTrace();}
-        jDialog1.setVisible(false);
-        int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
-        int yco=(LoginPage.hp.getHeight()-jDialog2.getHeight())/2;
-        jDialog2.setBounds(xco,yco,jDialog2.getWidth(),jDialog2.getHeight());
-        jDialog2.setVisible(true);
+        else
+        {
+            Vector<Buyer> buyerlist=LoginPage.datop.getBuyerList();
+            jComboBox1.removeAllItems();
+            jComboBox1.addItem("All");
+            for(int i=0;i<buyerlist.size();i++)
+                jComboBox1.addItem(buyerlist.get(i).name);
+        }
+        jDialog3.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     public String getTotalQuantity(Vector<Transaction> temp)
@@ -630,180 +585,29 @@ public class HomePage extends javax.swing.JFrame {
     }
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
-        try
+        jDialog1.setVisible(false);
+        jLabel3.setText("Buyer:");
+        int xco=(LoginPage.hp.getWidth()-jDialog3.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog3.getHeight())/2;
+        jDialog3.setBounds(xco,yco,jDialog3.getWidth(),jDialog3.getHeight());
+        jTextField2.setText("");
+        if(jLabel3.getText().equalsIgnoreCase("Seller:"))
+        {
+            Vector<Seller> sellerlist=LoginPage.datop.getSellerList();
+            jComboBox1.removeAllItems();
+            jComboBox1.addItem("All");
+            for(int i=0;i<sellerlist.size();i++)
+                jComboBox1.addItem(sellerlist.get(i).name);
+        }
+        else
         {
             Vector<Buyer> buyerlist=LoginPage.datop.getBuyerList();
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
-            LocalDateTime now = LocalDateTime.now();
-            String datetime=dtf.format(now);
-            File file=new File(LoginPage.loggedInUser+" Buyerwise Brokerage Bills");
-            file.mkdir();
-            Bill b=LoginPage.datop.getBillFormat();
-            if(b==null)
-            {
-                JOptionPane.showMessageDialog(null,"Bill Format not yet set","Error: invalid input",JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String leftlines[]=b.left.split("\n");
-            String rightlines[]=b.right.split("\n");
+            jComboBox1.removeAllItems();
+            jComboBox1.addItem("All");
             for(int i=0;i<buyerlist.size();i++)
-            {
-                Vector<Transaction> temp;
-                String filename=LoginPage.loggedInUser+" Buyerwise Brokerage Bills\\"+buyerlist.get(i).name+" "+datetime+".docx";
-                XWPFDocument doc=new XWPFDocument();
-                FileOutputStream fos=new FileOutputStream(new File(filename));
-                XWPFParagraph para1=doc.createParagraph();
-                para1.setAlignment(ParagraphAlignment.CENTER);
-                for(int j=0;j<leftlines.length||j<rightlines.length;j++)
-                {
-                    if(j<leftlines.length) {
-                        XWPFRun left=para1.createRun();
-                        left.setFontFamily("Calibri");
-                        left.setFontSize(14);
-                        left.setText(leftlines[j]+"\t\t\t\t\t");
-                    }
-                    else {
-                        XWPFRun left=para1.createRun();
-                        left.setFontFamily("Calibri");
-                        left.setFontSize(14);
-                        left.setText("\t\t\t\t\t\t\t");
-                    }
-                    if(j<rightlines.length) {
-                        XWPFRun right=para1.createRun();
-                        right.setFontFamily("Calibri");
-                        right.setFontSize(14);
-                        right.setText(rightlines[j]);
-                        right.addBreak();
-                    }
-                    else {
-                        XWPFRun right=para1.createRun();
-                        right.setFontFamily("Calibri");
-                        right.setFontSize(14);
-                        right.setText("\t\t\t\t");
-                        right.addBreak();
-                    }
-                }
-                XWPFParagraph para2=doc.createParagraph();
-                para2.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun name=para2.createRun();
-                name.setFontFamily("Calibri");
-                name.setBold(true);
-                name.setFontSize(18);
-                name.setText(b.broker_name);
-                name.addBreak();
-                XWPFRun address=para2.createRun();
-                address.setFontFamily("Calibri");
-                address.setFontSize(14);
-                address.setText(b.broker_address);
-                address.addBreak();
-                XWPFParagraph para3=doc.createParagraph();
-                para3.setAlignment(ParagraphAlignment.CENTER);
-                XWPFRun title=para3.createRun();
-                title.setFontFamily("Calibri");
-                title.setFontSize(16);
-                title.setBold(true);
-                title.setText(b.bill_title);
-                title.addBreak();
-                XWPFRun period=para3.createRun();
-                period.setFontFamily("Calibri");
-                period.setFontSize(14);
-                period.setText(b.bill_period);
-                period.addBreak();
-                temp=LoginPage.datop.getBuyerWiseTransactions(buyerlist.get(i).code,buyerlist.get(i).name);
-                if(temp.size()==0)
-                {
-                    doc.write(fos);
-                    fos.close();
-                    File f=new File(filename);
-                    f.delete();
-                    continue;
-                }
-                XWPFParagraph buyerName=doc.createParagraph();
-                buyerName.setAlignment(ParagraphAlignment.LEFT);
-                XWPFRun myRun=buyerName.createRun();
-                myRun.setFontFamily("Calibri");
-                myRun.setFontSize(12);
-                myRun.setBold(true);
-                myRun.setText("BUYER:\t"+temp.get(0).buyer_name);
-                myRun.addBreak();
-                XWPFRun mySecondRun=buyerName.createRun();
-                mySecondRun.setFontFamily("Calibri");
-                mySecondRun.setFontSize(12);
-                mySecondRun.setBold(true);
-                mySecondRun.setText(LoginPage.datop.getBuyerPlace(temp.get(0).buyer_code,temp.get(0).buyer_name));
-                XWPFTable table=doc.createTable();
-                XWPFTableRow row1=table.getRow(0);
-                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(5000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                XWPFRun rowcell[]=new XWPFRun[5];
-                for(int j=0;j<rowcell.length;j++)
-                {
-                    row1.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-                    row1.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
-                    rowcell[j]=row1.getCell(j).getParagraphs().get(0).createRun();
-                    rowcell[j].setBold(true);
-                    rowcell[j].setFontFamily("Calibri");
-                    rowcell[j].setFontSize(12);
-                }
-                rowcell[0].setText("DATE");
-                rowcell[1].setText("SELLER");
-                rowcell[2].setText("ITEM");
-                rowcell[3].setText("QUANTITY");
-                rowcell[4].setText("RATE");
-                for(int j=0;j<temp.size();j++)
-                {
-                    XWPFTableRow rowj=table.createRow();
-                    XWPFRun rowcellj[]=new XWPFRun[5];
-                    for(int k=0;k<rowcellj.length;k++)
-                    {
-                        rowj.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-                        if(k==1)
-                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
-                        else
-                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
-                        rowcellj[k]=rowj.getCell(k).getParagraphs().get(0).createRun();
-                        rowcellj[k].setFontFamily("Calibri");
-                        rowcellj[k].setFontSize(12);
-                    }
-                    rowcellj[0].setText(temp.get(j).date);
-                    rowcellj[1].setText(temp.get(j).seller_name);
-                    rowcellj[2].setText(temp.get(j).item);
-                    rowcellj[3].setText(Integer.toString(temp.get(j).quantity));
-                    rowcellj[4].setText(Integer.toString(temp.get(j).rate));
-                }
-                XWPFTableRow lastRow=table.createRow();
-                XWPFRun lastrowcells[]=new XWPFRun[5];
-                for(int k=0;k<lastrowcells.length;k++)
-                {
-                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
-                    if(k==1)
-                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
-                    else
-                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
-                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
-                    lastrowcells[k].setFontFamily("Calibri");
-                    lastrowcells[k].setFontSize(12);
-                }
-                lastrowcells[1].setBold(true);
-                lastrowcells[1].setText(temp.get(0).buyer_name+" Total");
-                lastrowcells[3].setBold(true);
-                lastrowcells[3].setText(getTotalQuantity(temp));
-                //lastrowcells[4].setBold(true);
-                //lastrowcells[4].setText(getTotalRate(temp));
-                doc.write(fos);
-                fos.close();
-            }
+                jComboBox1.addItem(buyerlist.get(i).name);
         }
-        catch(Exception e){}
-        jDialog1.setVisible(false);
-        jDialog1.setVisible(false);
-        int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
-        int yco=(LoginPage.hp.getHeight()-jDialog2.getHeight())/2;
-        jDialog2.setBounds(xco,yco,jDialog2.getWidth(),jDialog2.getHeight());
-        jDialog2.setVisible(true);
+        jDialog3.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton8KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton8KeyPressed
@@ -836,6 +640,7 @@ public class HomePage extends javax.swing.JFrame {
         // TODO add your handling code here:
         jDialog1.setVisible(false);
         jDialog2.setVisible(false);
+        jDialog3.setVisible(false);
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton11KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton11KeyPressed
@@ -855,6 +660,513 @@ public class HomePage extends javax.swing.JFrame {
         LoginPage.datop.filterDatabase();
         JOptionPane.showMessageDialog(null,"Database FIltered","Successful",JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton13ActionPerformed
+
+    void printSellerwise() {
+        try
+        {
+            Vector<Seller> sellerlist = new Vector<Seller>();
+            if(jComboBox1.getSelectedItem().toString().equalsIgnoreCase("All"))
+                sellerlist=LoginPage.datop.getSellerList();
+            else if(jComboBox1.getSelectedItem().toString().equalsIgnoreCase("All These"))
+                sellerlist=LoginPage.datop.getSpecificSellerList(jTextField2.getText().trim());
+            else
+                sellerlist=LoginPage.datop.getSellerListByName(jComboBox1.getSelectedItem().toString());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
+            LocalDateTime now = LocalDateTime.now();
+            String datetime=dtf.format(now);
+            File file=new File(LoginPage.loggedInUser+" Sellerwise Brokerage Bills");
+            file.mkdir();
+            Bill b=LoginPage.datop.getBillFormat();
+            if(b==null)
+            {
+                JOptionPane.showMessageDialog(null,"Bill Format not yet set","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String leftheader = b.left.substring(b.left.indexOf(";;@@##$$") + 8);
+            String leftmain = b.left.substring(0, b.left.indexOf(";;@@##$$"));
+            String rightheader = b.right.substring(b.right.indexOf(";;@@##$$") + 8);
+            String rightmain = b.right.substring(0, b.right.indexOf(";;@@##$$"));
+            String leftlines[]=leftmain.split("\n");
+            String rightlines[]=rightmain.split("\n");
+            for(int i=0;i<sellerlist.size();i++)
+            {
+                Vector<Transaction> temp;
+                String filename=LoginPage.loggedInUser+" Sellerwise Brokerage Bills\\"+sellerlist.get(i).name+" "+datetime+".docx";
+                XWPFDocument doc=new XWPFDocument();
+                CTSectPr sectPr = doc.getDocument().getBody().addNewSectPr();
+                CTPageMar pageMar = sectPr.addNewPgMar();
+                pageMar.setLeft(BigInteger.valueOf(100));
+                pageMar.setRight(BigInteger.valueOf(100));
+                pageMar.setTop(BigInteger.valueOf(300));
+                pageMar.setBottom(BigInteger.valueOf(100));
+                XWPFTable headerTable = doc.createTable();
+                headerTable.setTopBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setLeftBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setRightBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setBottomBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setInsideVBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setInsideHBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                XWPFTableRow headrow = headerTable.getRow(0);
+                headrow.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                headrow.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                headrow.getCell(0).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                headrow.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                headrow.getCell(1).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                headrow.getCell(1).getParagraphs().get(0).setAlignment(ParagraphAlignment.RIGHT);
+                XWPFRun leftheadertext = headrow.getCell(0).getParagraphs().get(0).createRun();
+                XWPFRun rightheadertext = headrow.getCell(1).getParagraphs().get(0).createRun();
+                leftheadertext.setFontFamily("Calibri");
+                leftheadertext.setFontSize(8);
+                leftheadertext.setText(leftheader);
+                rightheadertext.setFontFamily("Calibri");
+                rightheadertext.setFontSize(8);
+                rightheadertext.setText(rightheader);
+                FileOutputStream fos=new FileOutputStream(new File(filename));
+                XWPFTable addresstable=doc.createTable();
+                addresstable.setTopBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setLeftBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setRightBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setBottomBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setInsideVBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setInsideHBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                XWPFTableRow addrow1=addresstable.getRow(0);
+                addrow1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(5000));
+                addrow1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(5000));
+                XWPFRun[] leftcell = new XWPFRun[leftlines.length];
+                addrow1.getCell(0).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                addrow1.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                for(int j = 0; j < leftlines.length; j++) {
+                    leftcell[j]=addrow1.getCell(0).getParagraphs().get(0).createRun();
+                    leftcell[j].setFontFamily("Calibri");
+                    leftcell[j].setFontSize(12);
+                    leftcell[j].setText(leftlines[j]);
+                    if(j != leftlines.length - 1)
+                        leftcell[j].addBreak();
+                }
+                addrow1.getCell(1).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                addrow1.getCell(1).getParagraphs().get(0).setAlignment(ParagraphAlignment.RIGHT);
+                XWPFRun[] rightcell = new XWPFRun[rightlines.length];
+                for(int j = 0; j < rightlines.length; j++) {
+                    rightcell[j]=addrow1.getCell(1).getParagraphs().get(0).createRun();
+                    rightcell[j].setFontFamily("Calibri");
+                    rightcell[j].setFontSize(12);
+                    rightcell[j].setText(rightlines[j]);
+                    if(j != rightlines.length - 1)
+                        rightcell[j].addBreak();
+                }
+                XWPFParagraph para2=doc.createParagraph();
+                para2.setAlignment(ParagraphAlignment.CENTER);
+                int ind = b.broker_name.length();
+                if(b.broker_name.contains(";;@@##$$"))
+                    ind = b.broker_name.indexOf(";;@@##$$");
+                String bname = b.broker_name.substring(0, ind);
+                if(ind == b.broker_name.length())
+                    ind -= 8;
+                String bsubname = b.broker_name.substring(ind+8);
+                XWPFRun name=para2.createRun();
+                name.setFontFamily("Calibri");
+                name.setBold(true);
+                name.setFontSize(16);
+                name.setText(bname);
+                name.addBreak();
+                XWPFRun subname=para2.createRun();
+                subname.setFontFamily("Calibri");
+                subname.setBold(true);
+                subname.setFontSize(12);
+                subname.setText(bsubname);
+                subname.addBreak();
+                XWPFRun address=para2.createRun();
+                address.setFontFamily("Calibri");
+                address.setFontSize(12);
+                address.setText(b.broker_address);
+                XWPFParagraph para3=doc.createParagraph();
+                para3.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun title=para3.createRun();
+                title.setFontFamily("Calibri");
+                title.setFontSize(14);
+                title.setBold(true);
+                title.setText(b.bill_title);
+                title.addBreak();
+                XWPFRun period=para3.createRun();
+                period.setFontFamily("Calibri");
+                period.setFontSize(12);
+                period.setText(b.bill_period);
+                temp=LoginPage.datop.getSellerWiseTransactions(sellerlist.get(i).code,sellerlist.get(i).name);
+                if(temp.size()==0)
+                {
+                    doc.write(fos);
+                    fos.close();
+                    File f=new File(filename);
+                    f.delete();
+                    continue;
+                }
+                XWPFParagraph sellerName=doc.createParagraph();
+                sellerName.setAlignment(ParagraphAlignment.LEFT);
+                XWPFRun myRun=sellerName.createRun();
+                myRun.setFontFamily("Calibri");
+                myRun.setFontSize(10);
+                myRun.setBold(true);
+                myRun.setText("SELLER:\t"+temp.get(0).seller_name);
+                myRun.addBreak();
+                XWPFRun mySecondRun=sellerName.createRun();
+                mySecondRun.setFontFamily("Calibri");
+                mySecondRun.setFontSize(10);
+                mySecondRun.setBold(true);
+                mySecondRun.setText(LoginPage.datop.getSellerPlace(temp.get(0).seller_code,temp.get(0).seller_name));
+                XWPFTable table=doc.createTable();
+                XWPFTableRow row1=table.getRow(0);
+                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1750));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1850));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
+                XWPFRun rowcell[]=new XWPFRun[5];
+                for(int j=0;j<rowcell.length;j++)
+                {
+                    row1.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    row1.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    rowcell[j]=row1.getCell(j).getParagraphs().get(0).createRun();
+                    rowcell[j].setBold(true);
+                    rowcell[j].setFontFamily("Calibri");
+                    rowcell[j].setFontSize(10);
+                }
+                rowcell[0].setText("DATE");
+                rowcell[1].setText("BUYER");
+                rowcell[2].setText("ITEM");
+                rowcell[3].setText("QUANTITY");
+                rowcell[4].setText("RATE");
+                for(int j=0;j<temp.size();j++)
+                {
+                    XWPFTableRow rowj=table.createRow();
+                    XWPFRun rowcellj[]=new XWPFRun[5];
+                    for(int k=0;k<rowcellj.length;k++)
+                    {
+                        rowj.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                        if(k==1)
+                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                        else
+                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                        rowcellj[k]=rowj.getCell(k).getParagraphs().get(0).createRun();
+                        rowcellj[k].setFontFamily("Calibri");
+                        rowcellj[k].setFontSize(10);
+                    }
+                    rowcellj[0].setText(temp.get(j).date);
+                    rowcellj[1].setText(temp.get(j).buyer_name);
+                    rowcellj[2].setText(temp.get(j).item);
+                    rowcellj[3].setText(Integer.toString(temp.get(j).quantity));
+                    rowcellj[4].setText(Integer.toString(temp.get(j).rate));
+                }
+                XWPFTableRow lastRow=table.createRow();
+                XWPFRun lastrowcells[]=new XWPFRun[5];
+                for(int k=0;k<lastrowcells.length;k++)
+                {
+                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells[k].setFontFamily("Calibri");
+                    lastrowcells[k].setFontSize(10);
+                }
+                lastrowcells[1].setBold(true);
+                lastrowcells[1].setText(temp.get(0).seller_name+" Total");
+                lastrowcells[3].setBold(true);
+                lastrowcells[3].setText(getTotalQuantity(temp));
+                //lastrowcells[4].setBold(true);
+                //lastrowcells[4].setText(getTotalRate(temp));
+                doc.write(fos);
+                fos.close();
+            }
+        }
+        catch(Exception e){
+        e.printStackTrace();}
+        jDialog1.setVisible(false);
+        int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog2.getHeight())/2;
+        jDialog2.setBounds(xco,yco,jDialog2.getWidth(),jDialog2.getHeight());
+        jDialog2.setVisible(true);
+    }
+    
+    void printBuyerwise() {
+        try
+        {
+            Vector<Buyer> buyerlist = new Vector<Buyer>();
+            if(jComboBox1.getSelectedItem().toString().equalsIgnoreCase("All"))
+                buyerlist=LoginPage.datop.getBuyerList();
+            else if(jComboBox1.getSelectedItem().toString().equalsIgnoreCase("All These"))
+                buyerlist=LoginPage.datop.getSpecificBuyerList(jTextField2.getText().trim());
+            else
+                buyerlist=LoginPage.datop.getBuyerListByName(jComboBox1.getSelectedItem().toString());
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
+            LocalDateTime now = LocalDateTime.now();
+            String datetime=dtf.format(now);
+            File file=new File(LoginPage.loggedInUser+" Buyerwise Brokerage Bills");
+            file.mkdir();
+            Bill b=LoginPage.datop.getBillFormat();
+            if(b==null)
+            {
+                JOptionPane.showMessageDialog(null,"Bill Format not yet set","Error: invalid input",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String leftheader = b.left.substring(b.left.indexOf(";;@@##$$") + 8);
+            String leftmain = b.left.substring(0, b.left.indexOf(";;@@##$$"));
+            String rightheader = b.right.substring(b.right.indexOf(";;@@##$$") + 8);
+            String rightmain = b.right.substring(0, b.right.indexOf(";;@@##$$"));
+            String leftlines[]=leftmain.split("\n");
+            String rightlines[]=rightmain.split("\n");
+            for(int i=0;i<buyerlist.size();i++)
+            {
+                Vector<Transaction> temp;
+                String filename=LoginPage.loggedInUser+" Buyerwise Brokerage Bills\\"+buyerlist.get(i).name+" "+datetime+".docx";
+                XWPFDocument doc=new XWPFDocument();
+                CTSectPr sectPr = doc.getDocument().getBody().addNewSectPr();
+                CTPageMar pageMar = sectPr.addNewPgMar();
+                pageMar.setLeft(BigInteger.valueOf(100));
+                pageMar.setRight(BigInteger.valueOf(100));
+                pageMar.setTop(BigInteger.valueOf(300));
+                pageMar.setBottom(BigInteger.valueOf(100));
+                XWPFTable headerTable = doc.createTable();
+                headerTable.setTopBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setLeftBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setRightBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setBottomBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setInsideVBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                headerTable.setInsideHBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                XWPFTableRow headrow = headerTable.getRow(0);
+                headrow.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                headrow.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                headrow.getCell(0).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                headrow.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                headrow.getCell(1).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                headrow.getCell(1).getParagraphs().get(0).setAlignment(ParagraphAlignment.RIGHT);
+                XWPFRun leftheadertext = headrow.getCell(0).getParagraphs().get(0).createRun();
+                XWPFRun rightheadertext = headrow.getCell(1).getParagraphs().get(0).createRun();
+                leftheadertext.setFontFamily("Calibri");
+                leftheadertext.setFontSize(8);
+                leftheadertext.setText(leftheader);
+                rightheadertext.setFontFamily("Calibri");
+                rightheadertext.setFontSize(8);
+                rightheadertext.setText(rightheader);
+                FileOutputStream fos=new FileOutputStream(new File(filename));
+                XWPFTable addresstable=doc.createTable();
+                addresstable.setTopBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setLeftBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setRightBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setBottomBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setInsideVBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                addresstable.setInsideHBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+                XWPFTableRow addrow1=addresstable.getRow(0);
+                addrow1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                addrow1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                XWPFRun[] leftcell = new XWPFRun[leftlines.length];
+                addrow1.getCell(0).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                addrow1.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                for(int j = 0; j < leftlines.length; j++) {
+                    leftcell[j]=addrow1.getCell(0).getParagraphs().get(0).createRun();
+                    leftcell[j].setFontFamily("Calibri");
+                    leftcell[j].setFontSize(12);
+                    leftcell[j].setText(leftlines[j]);
+                    if(j != leftlines.length - 1)
+                        leftcell[j].addBreak();
+                }
+                addrow1.getCell(1).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+                addrow1.getCell(1).getParagraphs().get(0).setAlignment(ParagraphAlignment.RIGHT);
+                XWPFRun[] rightcell = new XWPFRun[rightlines.length];
+                for(int j = 0; j < rightlines.length; j++) {
+                    rightcell[j]=addrow1.getCell(1).getParagraphs().get(0).createRun();
+                    rightcell[j].setFontFamily("Calibri");
+                    rightcell[j].setFontSize(12);
+                    rightcell[j].setText(rightlines[j]);
+                    if(j != rightlines.length - 1)
+                        rightcell[j].addBreak();
+                }
+                int ind = b.broker_name.length();
+                if(b.broker_name.contains(";;@@##$$"))
+                    ind = b.broker_name.indexOf(";;@@##$$");
+                String bname = b.broker_name.substring(0, ind);
+                if(ind == b.broker_name.length())
+                    ind -= 8;
+                String bsubname = b.broker_name.substring(ind+8);
+                XWPFParagraph para2=doc.createParagraph();
+                para2.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun name=para2.createRun();
+                name.setFontFamily("Calibri");
+                name.setBold(true);
+                name.setFontSize(16);
+                name.setText(bname);
+                name.addBreak();
+                XWPFRun subname=para2.createRun();
+                subname.setFontFamily("Calibri");
+                subname.setBold(true);
+                subname.setFontSize(12);
+                subname.setText(bsubname);
+                subname.addBreak();
+                XWPFRun address=para2.createRun();
+                address.setFontFamily("Calibri");
+                address.setFontSize(12);
+                address.setText(b.broker_address);
+                XWPFParagraph para3=doc.createParagraph();
+                para3.setAlignment(ParagraphAlignment.CENTER);
+                XWPFRun title=para3.createRun();
+                title.setFontFamily("Calibri");
+                title.setFontSize(14);
+                title.setBold(true);
+                title.setText(b.bill_title);
+                title.addBreak();
+                XWPFRun period=para3.createRun();
+                period.setFontFamily("Calibri");
+                period.setFontSize(12);
+                period.setText(b.bill_period);
+                temp=LoginPage.datop.getBuyerWiseTransactions(buyerlist.get(i).code,buyerlist.get(i).name);
+                if(temp.size()==0)
+                {
+                    doc.write(fos);
+                    fos.close();
+                    File f=new File(filename);
+                    f.delete();
+                    continue;
+                }
+                XWPFParagraph buyerName=doc.createParagraph();
+                buyerName.setAlignment(ParagraphAlignment.LEFT);
+                XWPFRun myRun=buyerName.createRun();
+                myRun.setFontFamily("Calibri");
+                myRun.setFontSize(10);
+                myRun.setBold(true);
+                myRun.setText("BUYER:\t"+temp.get(0).buyer_name);
+                myRun.addBreak();
+                XWPFRun mySecondRun=buyerName.createRun();
+                mySecondRun.setFontFamily("Calibri");
+                mySecondRun.setFontSize(10);
+                mySecondRun.setBold(true);
+                mySecondRun.setText(LoginPage.datop.getBuyerPlace(temp.get(0).buyer_code,temp.get(0).buyer_name));
+                XWPFTable table=doc.createTable();
+                XWPFTableRow row1=table.getRow(0);
+                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1750));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1850));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
+                XWPFRun rowcell[]=new XWPFRun[5];
+                for(int j=0;j<rowcell.length;j++)
+                {
+                    row1.getCell(j).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    row1.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    rowcell[j]=row1.getCell(j).getParagraphs().get(0).createRun();
+                    rowcell[j].setBold(true);
+                    rowcell[j].setFontFamily("Calibri");
+                    rowcell[j].setFontSize(10);
+                }
+                rowcell[0].setText("DATE");
+                rowcell[1].setText("SELLER");
+                rowcell[2].setText("ITEM");
+                rowcell[3].setText("QUANTITY");
+                rowcell[4].setText("RATE");
+                for(int j=0;j<temp.size();j++)
+                {
+                    XWPFTableRow rowj=table.createRow();
+                    XWPFRun rowcellj[]=new XWPFRun[5];
+                    for(int k=0;k<rowcellj.length;k++)
+                    {
+                        rowj.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                        if(k==1)
+                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                        else
+                            rowj.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                        rowcellj[k]=rowj.getCell(k).getParagraphs().get(0).createRun();
+                        rowcellj[k].setFontFamily("Calibri");
+                        rowcellj[k].setFontSize(10);
+                    }
+                    rowcellj[0].setText(temp.get(j).date);
+                    rowcellj[1].setText(temp.get(j).seller_name);
+                    rowcellj[2].setText(temp.get(j).item);
+                    rowcellj[3].setText(Integer.toString(temp.get(j).quantity));
+                    rowcellj[4].setText(Integer.toString(temp.get(j).rate));
+                }
+                XWPFTableRow lastRow=table.createRow();
+                XWPFRun lastrowcells[]=new XWPFRun[5];
+                for(int k=0;k<lastrowcells.length;k++)
+                {
+                    lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells[k].setFontFamily("Calibri");
+                    lastrowcells[k].setFontSize(10);
+                }
+                lastrowcells[1].setBold(true);
+                lastrowcells[1].setText(temp.get(0).buyer_name+" Total");
+                lastrowcells[3].setBold(true);
+                lastrowcells[3].setText(getTotalQuantity(temp));
+                //lastrowcells[4].setBold(true);
+                //lastrowcells[4].setText(getTotalRate(temp));
+                doc.write(fos);
+                fos.close();
+            }
+        }
+        catch(Exception e){}
+        jDialog1.setVisible(false);
+        jDialog1.setVisible(false);
+        int xco=(LoginPage.hp.getWidth()-jDialog2.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog2.getHeight())/2;
+        jDialog2.setBounds(xco,yco,jDialog2.getWidth(),jDialog2.getHeight());
+        jDialog2.setVisible(true);
+    }
+    
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        // TODO add your handling code here:
+        if(jLabel3.getText().equalsIgnoreCase("Seller:"))
+            printSellerwise();
+        else
+            printBuyerwise();
+    }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        // TODO add your handling code here:
+        Vector<Seller> sellerlist;
+        Vector<Buyer> buyerlist;
+        String text=jTextField2.getText().trim().toUpperCase();
+        if(text.equals(""))
+        {
+            if(jLabel3.getText().equalsIgnoreCase("Seller:"))
+            {
+                sellerlist=LoginPage.datop.getSellerList();
+                jComboBox1.removeAllItems();
+                jComboBox1.addItem("All");
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox1.addItem(sellerlist.get(i).name);
+            }
+            else
+            {
+                buyerlist=LoginPage.datop.getBuyerList();
+                jComboBox1.removeAllItems();
+                jComboBox1.addItem("All");
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox1.addItem(buyerlist.get(i).name);
+            }
+        }
+        else
+        {
+            if(jLabel3.getText().equalsIgnoreCase("Seller:"))
+            {
+                sellerlist=LoginPage.datop.getSpecificSellerList(text);
+                jComboBox1.removeAllItems();
+                jComboBox1.addItem("All These");
+                for(int i=0;i<sellerlist.size();i++)
+                    jComboBox1.addItem(sellerlist.get(i).name);
+            }
+            else
+            {
+                buyerlist=LoginPage.datop.getSpecificBuyerList(text);
+                jComboBox1.removeAllItems();
+                jComboBox1.addItem("All These");
+                for(int i=0;i<buyerlist.size();i++)
+                    jComboBox1.addItem(buyerlist.get(i).name);
+            }
+        }
+    }//GEN-LAST:event_jTextField2KeyReleased
 
     /**
      * @param args the command line arguments
@@ -897,6 +1209,7 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -905,9 +1218,16 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JDialog jDialog2;
+    private javax.swing.JDialog jDialog3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

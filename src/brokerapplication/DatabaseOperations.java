@@ -213,9 +213,12 @@ public class DatabaseOperations {
         try
         {
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" order by `seller_name` asc;");
-            while(rs.next())
-                sellerlist.add(new Seller(rs.getString("seller_code"),rs.getString("seller_name"),rs.getInt("quantity")));
+            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" order by `seller_code` asc;");
+            while(rs.next()) {
+                Seller newS = new Seller(rs.getString("seller_code"),rs.getString("seller_name"),rs.getInt("quantity"));
+                newS.setPlace(rs.getString("place"));
+                sellerlist.add(newS);
+            }
         }
         catch(Exception e){e.printStackTrace();}
         try{conn.close();}catch(Exception e){e.printStackTrace();}
@@ -228,9 +231,12 @@ public class DatabaseOperations {
         try
         {
             st=conn.createStatement();
-            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" order by `buyer_name` asc;");
-            while(rs.next())
-                buyerlist.add(new Buyer(rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getInt("quantity")));
+            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" order by `buyer_code` asc;");
+            while(rs.next()) {
+                Buyer newB = new Buyer(rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getInt("quantity"));
+                newB.setPlace(rs.getString("place"));
+                buyerlist.add(newB);
+            }
         }
         catch(Exception e){e.printStackTrace();}
         try{conn.close();}catch(Exception e){e.printStackTrace();}
@@ -306,6 +312,23 @@ public class DatabaseOperations {
         try{conn.close();}catch(Exception e){e.printStackTrace();}
         return sellerlist;
     }
+
+    public Vector<Seller> getSellerListByName(String text)
+    {
+        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+        Vector<Seller> sellerlist=new Vector<Seller>();
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `seller_name`=\""+text+"\";");
+            while(rs.next())
+                sellerlist.add(new Seller(rs.getString("seller_code"),rs.getString("seller_name"),rs.getInt("quantity")));
+        }
+        catch(Exception e){e.printStackTrace();}
+        try{conn.close();}catch(Exception e){e.printStackTrace();}
+        return sellerlist;
+    }
+    
     public Vector<Buyer> getSpecificBuyerList(String text)
     {
         try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
@@ -322,6 +345,23 @@ public class DatabaseOperations {
         try{conn.close();}catch(Exception e){e.printStackTrace();}
         return buyerlist;
     }
+
+    public Vector<Buyer> getBuyerListByName(String text)
+    {
+        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
+        Vector<Buyer> buyerlist=new Vector<Buyer>();
+        try
+        {
+            st=conn.createStatement();
+            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_name`=\""+text+"\" order by `buyer_name` asc;");
+            while(rs.next())
+                buyerlist.add(new Buyer(rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getInt("quantity")));
+        }
+        catch(Exception e){e.printStackTrace();}
+        try{conn.close();}catch(Exception e){e.printStackTrace();}
+        return buyerlist;
+    }
+    
     public void addSellerWiseTransaction(Seller mainseller,Vector<Buyer> finalbuyerlist,Vector<String> items,Vector<String> rate,String date)
     {
         try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
@@ -621,36 +661,7 @@ public class DatabaseOperations {
         try{conn.close();}catch(Exception e){e.printStackTrace();}
         return b;
     }
-    public Vector<String> getSellerPlaceList()
-    {
-        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
-        Vector<String> sellerplacelist=new Vector<String>();
-        try
-        {
-            st=conn.createStatement();
-            rs=st.executeQuery("select * from `sellerdata` where `username`=\""+LoginPage.loggedInUser+"\";");
-            while(rs.next())
-                sellerplacelist.add(rs.getString("place"));
-        }
-        catch(Exception e){}
-        try{conn.close();}catch(Exception e){e.printStackTrace();}
-        return sellerplacelist;
-    }
-    public Vector<String> getBuyerPlaceList()
-    {
-        try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
-        Vector<String> buyerplacelist=new Vector<String>();
-        try
-        {
-            st=conn.createStatement();
-            rs=st.executeQuery("select * from `buyerdata` where `username`=\""+LoginPage.loggedInUser+"\";");
-            while(rs.next())
-                buyerplacelist.add(rs.getString("place"));
-        }
-        catch(Exception e){}
-        try{conn.close();}catch(Exception e){e.printStackTrace();}
-        return buyerplacelist;
-    }
+
     public String getSellerPlace(String seller_code,String seller_name)
     {
         try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}
@@ -975,5 +986,11 @@ public class DatabaseOperations {
             }
         }
         catch(Exception e){e.printStackTrace();}
+    }
+    
+    public void deleteTransactionsForDate(String date) {
+        Vector<Transaction> transVec = getTransactions(date);
+        for(int i = 0; i < transVec.size(); i++)
+            deleteParticularTransaction(transVec.get(i));
     }
 }

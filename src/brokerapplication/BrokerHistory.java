@@ -325,6 +325,7 @@ public class BrokerHistory extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
 
         jDialog1.setTitle("Delete Transaction History");
         jDialog1.setSize(new java.awt.Dimension(750, 300));
@@ -625,8 +626,8 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 9;
-        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 0);
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 60, 300);
         jPanel1.add(jComboBox1, gridBagConstraints);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -767,7 +768,8 @@ public class BrokerHistory extends javax.swing.JFrame {
         jPanel1.add(jButton2, gridBagConstraints);
 
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
-        jButton3.setText("Clear");
+        jButton3.setText("Clear All");
+        jButton3.setPreferredSize(new java.awt.Dimension(200, 50));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -813,6 +815,21 @@ public class BrokerHistory extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(60, 300, 0, 0);
         jPanel1.add(jButton10, gridBagConstraints);
 
+        jButton11.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
+        jButton11.setText("Clear");
+        jButton11.setPreferredSize(new java.awt.Dimension(200, 50));
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 300, 60, 0);
+        jPanel1.add(jButton11, gridBagConstraints);
+
         jScrollPane1.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -852,7 +869,11 @@ public class BrokerHistory extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         jDialog1.setVisible(false);
-        LoginPage.datop.deleteTransactions();
+        String sel = jComboBox1.getSelectedItem().toString();
+        if(sel.equalsIgnoreCase("All"))
+            LoginPage.datop.deleteTransactions();
+        else
+            LoginPage.datop.deleteTransactionsForDate(sel.toLowerCase());
         deleteDisplay();
         transactionsToDisplay=LoginPage.datop.getTransactions(jComboBox1.getSelectedItem().toString().toLowerCase());
         showDisplay();
@@ -1012,6 +1033,17 @@ public class BrokerHistory extends javax.swing.JFrame {
         showDisplay();
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        int xco=(LoginPage.hp.getWidth()-jDialog1.getWidth())/2;
+        int yco=(LoginPage.hp.getHeight()-jDialog1.getHeight())/2;
+        String sel = jComboBox1.getSelectedItem().toString();
+        if(!sel.equalsIgnoreCase("All"))
+            jLabel7.setText("For: " + jComboBox1.getSelectedItem().toString().toLowerCase());
+        jDialog1.setBounds(xco,yco,jDialog1.getWidth(),jDialog1.getHeight());
+        jDialog1.setVisible(true);
+    }//GEN-LAST:event_jButton11ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1050,6 +1082,7 @@ public class BrokerHistory extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

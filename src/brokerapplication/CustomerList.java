@@ -31,6 +31,8 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 
 /**
  *
@@ -45,8 +47,6 @@ public class CustomerList extends javax.swing.JFrame {
     String myFileName;
     Vector<Seller> sellerlist;
     Vector<Buyer> buyerlist;
-    Vector<String> sellerplacelist;
-    Vector<String> buyerplacelist;
     JLabel sr_nos[];
     JLabel codes[];
     JLabel names[];
@@ -67,8 +67,6 @@ public class CustomerList extends javax.swing.JFrame {
                 {
                     sellerlist=LoginPage.datop.getSellerList();
                     buyerlist=LoginPage.datop.getBuyerList();
-                    sellerplacelist=LoginPage.datop.getSellerPlaceList();
-                    buyerplacelist=LoginPage.datop.getBuyerPlaceList();
                     clearPage();
                     displaySellers();
                     displayBuyers(35);
@@ -89,9 +87,7 @@ public class CustomerList extends javax.swing.JFrame {
                 else if(jComboBox1.getSelectedItem().toString().equals("Sellers"))
                 {
                     sellerlist=LoginPage.datop.getSellerList();
-                    sellerplacelist=LoginPage.datop.getSellerPlaceList();
                     buyerlist.clear();
-                    buyerplacelist.clear();
                     clearPage();
                     displaySellers();
                     GridBagConstraints gbc=new GridBagConstraints();
@@ -111,9 +107,7 @@ public class CustomerList extends javax.swing.JFrame {
                 else
                 {
                     sellerlist.clear();
-                    sellerplacelist.clear();
                     buyerlist=LoginPage.datop.getBuyerList();
-                    buyerplacelist=LoginPage.datop.getBuyerPlaceList();
                     clearPage();
                     displayBuyers(0);
                     GridBagConstraints gbc=new GridBagConstraints();
@@ -133,9 +127,7 @@ public class CustomerList extends javax.swing.JFrame {
             }
         });
         sellerlist=LoginPage.datop.getSellerList();
-        sellerplacelist=LoginPage.datop.getSellerPlaceList();
         buyerlist=LoginPage.datop.getBuyerList();
-        buyerplacelist=LoginPage.datop.getBuyerPlaceList();
         total=sellerlist.size()+buyerlist.size();
         sr_nos=new JLabel[total];
         codes=new JLabel[total];
@@ -202,7 +194,7 @@ public class CustomerList extends javax.swing.JFrame {
             places[i]=new JLabel();
             places[i].setFont(new java.awt.Font("Tahoma",0,24));
             places[i].setPreferredSize(new java.awt.Dimension(152,50));
-            places[i].setText(sellerplacelist.get(i));
+            places[i].setText(sellerlist.get(i).place);
             places[i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
             places[i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             gbc.gridx=2;
@@ -245,7 +237,7 @@ public class CustomerList extends javax.swing.JFrame {
                     jComboBox2.setSelectedIndex(0);
                     jTextField1.setText(codes[selected].getText());
                     jTextField2.setText(names[selected].getText());
-                    jTextField3.setText(quantities[selected].getText());
+                    jLabel19.setText(quantities[selected].getText());
                     jTextField4.setText(places[selected].getText());
                     int basex=LoginPage.hp.getWidth();
                     int basey=LoginPage.hp.getHeight();
@@ -301,7 +293,7 @@ public class CustomerList extends javax.swing.JFrame {
             places[sellerlist.size()+i]=new JLabel();
             places[sellerlist.size()+i].setFont(new java.awt.Font("Tahoma",0,24));
             places[sellerlist.size()+i].setPreferredSize(new java.awt.Dimension(152,50));
-            places[sellerlist.size()+i].setText(buyerplacelist.get(i));
+            places[sellerlist.size()+i].setText(buyerlist.get(i).place);
             places[sellerlist.size()+i].setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
             places[sellerlist.size()+i].setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
             gbc.gridx=2;
@@ -341,7 +333,7 @@ public class CustomerList extends javax.swing.JFrame {
                     jComboBox2.setSelectedIndex(1);
                     jTextField1.setText(codes[selected].getText());
                     jTextField2.setText(names[selected].getText());
-                    jTextField3.setText(quantities[selected].getText());
+                    jLabel19.setText(quantities[selected].getText());
                     jTextField4.setText(places[selected].getText());
                     int basex=LoginPage.hp.getWidth();
                     int basey=LoginPage.hp.getHeight();
@@ -395,13 +387,13 @@ public class CustomerList extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jButton4 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
         jDialog2 = new javax.swing.JDialog();
         jLabel11 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
@@ -494,13 +486,6 @@ public class CustomerList extends javax.swing.JFrame {
         gridBagConstraints.gridy = 5;
         jDialog1.getContentPane().add(jLabel9, gridBagConstraints);
 
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTextField3.setPreferredSize(new java.awt.Dimension(120, 40));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        jDialog1.getContentPane().add(jTextField3, gridBagConstraints);
-
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         jButton3.setText("Update");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -572,6 +557,13 @@ public class CustomerList extends javax.swing.JFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 20, 0);
         jDialog1.getContentPane().add(jTextField4, gridBagConstraints);
+
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel19.setPreferredSize(new java.awt.Dimension(120, 40));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        jDialog1.getContentPane().add(jLabel19, gridBagConstraints);
 
         jDialog2.setTitle("Confirmation");
         jDialog2.setSize(new java.awt.Dimension(600, 300));
@@ -942,6 +934,18 @@ public class CustomerList extends javax.swing.JFrame {
                 fw2.write("buyers\n");
                 XWPFDocument doc1=new XWPFDocument();
                 XWPFDocument doc2=new XWPFDocument();
+                CTSectPr sectPr1 = doc1.getDocument().getBody().addNewSectPr();
+                CTPageMar pageMar1 = sectPr1.addNewPgMar();
+                pageMar1.setLeft(BigInteger.valueOf(100));
+                pageMar1.setRight(BigInteger.valueOf(100));
+                pageMar1.setTop(BigInteger.valueOf(300));
+                pageMar1.setBottom(BigInteger.valueOf(100));
+                CTSectPr sectPr2 = doc2.getDocument().getBody().addNewSectPr();
+                CTPageMar pageMar2 = sectPr2.addNewPgMar();
+                pageMar2.setLeft(BigInteger.valueOf(100));
+                pageMar2.setRight(BigInteger.valueOf(100));
+                pageMar2.setTop(BigInteger.valueOf(300));
+                pageMar2.setBottom(BigInteger.valueOf(100));
                 FileOutputStream fos=new FileOutputStream(new File(filename));
                 FileOutputStream fos2=new FileOutputStream(new File(filename2));
                 XWPFParagraph doc1para1=doc1.createParagraph();
@@ -950,37 +954,37 @@ public class CustomerList extends javax.swing.JFrame {
                 XWPFRun doc1para1run1=doc1para1.createRun();
                 doc1para1run1.setBold(true);
                 doc1para1run1.setFontFamily("Calibri");
-                doc1para1run1.setFontSize(18);
+                doc1para1run1.setFontSize(16);
                 doc1para1run1.setText(LoginPage.datop.getName(LoginPage.loggedInUser).toUpperCase());
                 doc1para1run1.addBreak();
                 doc2para1.setAlignment(ParagraphAlignment.CENTER);
                 XWPFRun doc2para1run1=doc2para1.createRun();
                 doc2para1run1.setBold(true);
                 doc2para1run1.setFontFamily("Calibri");
-                doc2para1run1.setFontSize(18);
+                doc2para1run1.setFontSize(16);
                 doc2para1run1.setText(LoginPage.datop.getName(LoginPage.loggedInUser).toUpperCase());
                 doc2para1run1.addBreak();
                 XWPFRun doc1para1run2=doc1para1.createRun();
                 doc1para1run2.setBold(true);
                 doc1para1run2.setFontFamily("Calibri");
-                doc1para1run2.setFontSize(16);
+                doc1para1run2.setFontSize(14);
                 doc1para1run2.setText("Seller wise List");
                 XWPFRun doc2para1run2=doc2para1.createRun();
                 doc2para1run2.setBold(true);
                 doc2para1run2.setFontFamily("Calibri");
-                doc2para1run2.setFontSize(16);
+                doc2para1run2.setFontSize(14);
                 doc2para1run2.setText("Buyer wise List");
                 XWPFTable table1=doc1.createTable();
                 XWPFTableRow doc1row1=table1.getRow(0);
-                doc1row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                doc1row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(7200));
-                doc1row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
+                doc1row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1800));
+                doc1row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(7800));
+                doc1row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(2400));
                 XWPFRun doc1rowcell[]=new XWPFRun[3];
                 XWPFTable table2=doc2.createTable();
                 XWPFTableRow doc2row1=table2.getRow(0);
-                doc2row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                doc2row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(7200));
-                doc2row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
+                doc2row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1800));
+                doc2row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(7800));
+                doc2row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(2400));
                 XWPFRun doc2rowcell[]=new XWPFRun[3];
                 for(int i=0;i<doc1rowcell.length;i++)
                 {
@@ -989,7 +993,7 @@ public class CustomerList extends javax.swing.JFrame {
                     doc1rowcell[i]=doc1row1.getCell(i).getParagraphs().get(0).createRun();
                     doc1rowcell[i].setBold(true);
                     doc1rowcell[i].setFontFamily("Calibri");
-                    doc1rowcell[i].setFontSize(14);
+                    doc1rowcell[i].setFontSize(12);
                 }
                 doc1rowcell[0].setText("Sr No.");
                 doc1rowcell[1].setText("Seller");
@@ -1001,7 +1005,7 @@ public class CustomerList extends javax.swing.JFrame {
                     doc2rowcell[i]=doc2row1.getCell(i).getParagraphs().get(0).createRun();
                     doc2rowcell[i].setBold(true);
                     doc2rowcell[i].setFontFamily("Calibri");
-                    doc2rowcell[i].setFontSize(14);
+                    doc2rowcell[i].setFontSize(12);
                 }
                 doc2rowcell[0].setText("Sr No.");
                 doc2rowcell[1].setText("Buyer");
@@ -1019,7 +1023,7 @@ public class CustomerList extends javax.swing.JFrame {
                             doc1rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
                         doc1rowcelli[j]=doc1rowi.getCell(j).getParagraphs().get(0).createRun();
                         doc1rowcelli[j].setFontFamily("Calibri");
-                        doc1rowcelli[j].setFontSize(14);
+                        doc1rowcelli[j].setFontSize(12);
                     }
                     doc1rowcelli[0].setText(Integer.toString(i+1));
                     doc1rowcelli[1].setText(sellerlist.get(i).code+"- "+sellerlist.get(i).name);
@@ -1039,13 +1043,48 @@ public class CustomerList extends javax.swing.JFrame {
                             doc2rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
                         doc2rowcelli[j]=doc2rowi.getCell(j).getParagraphs().get(0).createRun();
                         doc2rowcelli[j].setFontFamily("Calibri");
-                        doc2rowcelli[j].setFontSize(14);
+                        doc2rowcelli[j].setFontSize(12);
                     }
                     doc2rowcelli[0].setText(Integer.toString(i+1));
                     doc2rowcelli[1].setText(buyerlist.get(i).code+"- "+buyerlist.get(i).name);
                     doc2rowcelli[2].setText(Integer.toString(buyerlist.get(i).quantity));
                     fw2.write(buyerlist.get(i).code+"$"+buyerlist.get(i).name+"$0$"+LoginPage.datop.getBuyerPlace(buyerlist.get(i).code,buyerlist.get(i).name)+"\n");
                 }
+                XWPFTableRow lastRow1=table1.createRow();
+                XWPFTableRow lastRow2=table2.createRow();
+                XWPFRun lastrowcells1[]=new XWPFRun[3];
+                for(int k=0;k<lastrowcells1.length;k++)
+                {
+                    lastRow1.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow1.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow1.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells1[k]=lastRow1.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells1[k].setFontFamily("Calibri");
+                    lastrowcells1[k].setFontSize(12);
+                }
+                lastrowcells1[1].setBold(true);
+                lastrowcells1[1].setText(" Total");
+                lastrowcells1[2].setBold(true);
+                lastrowcells1[2].setText(getTotalSellerQuantity(sellerlist));
+                
+                XWPFRun lastrowcells2[]=new XWPFRun[3];
+                for(int k=0;k<lastrowcells2.length;k++)
+                {
+                    lastRow2.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                    if(k==1)
+                        lastRow2.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                    else
+                        lastRow2.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                    lastrowcells2[k]=lastRow2.getCell(k).getParagraphs().get(0).createRun();
+                    lastrowcells2[k].setFontFamily("Calibri");
+                    lastrowcells2[k].setFontSize(12);
+                }
+                lastrowcells2[1].setBold(true);
+                lastrowcells2[1].setText(" Total");
+                lastrowcells2[2].setBold(true);
+                lastrowcells2[2].setText(getTotalBuyerQuantity(buyerlist));
                 doc1.write(fos);
                 fos.close();
                 fw.close();
@@ -1075,25 +1114,31 @@ public class CustomerList extends javax.swing.JFrame {
                 fw.write("buyers\n");
             }
             XWPFDocument doc=new XWPFDocument();
+            CTSectPr sectPr = doc.getDocument().getBody().addNewSectPr();
+            CTPageMar pageMar = sectPr.addNewPgMar();
+            pageMar.setLeft(BigInteger.valueOf(100));
+            pageMar.setRight(BigInteger.valueOf(100));
+            pageMar.setTop(BigInteger.valueOf(300));
+            pageMar.setBottom(BigInteger.valueOf(100));
             FileOutputStream fos=new FileOutputStream(new File(filename));
             XWPFParagraph para1=doc.createParagraph();
             para1.setAlignment(ParagraphAlignment.CENTER);
             XWPFRun para1run1=para1.createRun();
             para1run1.setBold(true);
             para1run1.setFontFamily("Calibri");
-            para1run1.setFontSize(18);
+            para1run1.setFontSize(16);
             para1run1.setText(LoginPage.datop.getName(LoginPage.loggedInUser).toUpperCase());
             para1run1.addBreak();
             XWPFRun para1run2=para1.createRun();
             para1run2.setBold(true);
             para1run2.setFontFamily("Calibri");
-            para1run2.setFontSize(16);
+            para1run2.setFontSize(14);
             para1run2.setText(jComboBox1.getSelectedItem().toString().substring(0,jComboBox1.getSelectedItem().toString().length()-1)+" wise List");
             XWPFTable table=doc.createTable();
             XWPFTableRow row1=table.getRow(0);
-            row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-            row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(7200));
-            row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
+            row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1800));
+            row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(7800));
+            row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(2400));
             XWPFRun rowcell[]=new XWPFRun[3];
             for(int i=0;i<rowcell.length;i++)
             {
@@ -1102,7 +1147,7 @@ public class CustomerList extends javax.swing.JFrame {
                 rowcell[i]=row1.getCell(i).getParagraphs().get(0).createRun();
                 rowcell[i].setBold(true);
                 rowcell[i].setFontFamily("Calibri");
-                rowcell[i].setFontSize(14);
+                rowcell[i].setFontSize(12);
             }
             rowcell[0].setText("Sr No.");
             if(jComboBox1.getSelectedIndex()==1)
@@ -1125,7 +1170,7 @@ public class CustomerList extends javax.swing.JFrame {
                             rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
                         rowcelli[j]=rowi.getCell(j).getParagraphs().get(0).createRun();
                         rowcelli[j].setFontFamily("Calibri");
-                        rowcelli[j].setFontSize(14);
+                        rowcelli[j].setFontSize(12);
                     }
                     rowcelli[0].setText(Integer.toString(i+1));
                     rowcelli[1].setText(sellerlist.get(i).code+"- "+sellerlist.get(i).name);
@@ -1148,7 +1193,7 @@ public class CustomerList extends javax.swing.JFrame {
                             rowi.getCell(j).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
                         rowcelli[j]=rowi.getCell(j).getParagraphs().get(0).createRun();
                         rowcelli[j].setFontFamily("Calibri");
-                        rowcelli[j].setFontSize(14);
+                        rowcelli[j].setFontSize(12);
                     }
                     rowcelli[0].setText(Integer.toString(i+1));
                     rowcelli[1].setText(buyerlist.get(i).code+"- "+buyerlist.get(i).name);
@@ -1156,6 +1201,26 @@ public class CustomerList extends javax.swing.JFrame {
                     fw.write(buyerlist.get(i).code+"$"+buyerlist.get(i).name+"$0$"+LoginPage.datop.getBuyerPlace(buyerlist.get(i).code,buyerlist.get(i).name)+"\n");
                 }
             }
+            XWPFTableRow lastRow=table.createRow();
+            XWPFRun lastrowcells[]=new XWPFRun[3];
+            for(int k=0;k<lastrowcells.length;k++)
+            {
+                lastRow.getCell(k).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
+                if(k==1)
+                    lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+                else
+                    lastRow.getCell(k).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+                lastrowcells[k]=lastRow.getCell(k).getParagraphs().get(0).createRun();
+                lastrowcells[k].setFontFamily("Calibri");
+                lastrowcells[k].setFontSize(10);
+            }
+            lastrowcells[1].setBold(true);
+            lastrowcells[1].setText(" Total");
+            lastrowcells[2].setBold(true);
+            if(jComboBox1.getSelectedIndex()==1)
+                lastrowcells[2].setText(getTotalSellerQuantity(sellerlist));
+            else
+                lastrowcells[2].setText(getTotalBuyerQuantity(buyerlist));
             doc.write(fos);
             fos.close();
             fw.close();
@@ -1167,6 +1232,20 @@ public class CustomerList extends javax.swing.JFrame {
         catch(Exception e){e.printStackTrace();}
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    String getTotalBuyerQuantity(Vector<Buyer> buyerlist) {
+        int total = 0;
+        for(int i = 0; i < buyerlist.size(); i++)
+            total += buyerlist.get(i).quantity;
+        return Integer.toString(total);
+    }
+    
+    String getTotalSellerQuantity(Vector<Seller> sellerlist) {
+        int total = 0;
+        for(int i = 0; i < sellerlist.size(); i++)
+            total += sellerlist.get(i).quantity;
+        return Integer.toString(total);
+    }
+    
     public void askPrint(String filename)
     {
         myFileName=filename;
@@ -1210,10 +1289,10 @@ public class CustomerList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Name can't be empty","Error: Invalid input",JOptionPane.ERROR_MESSAGE);
             jTextField2.requestFocus();
         }
-        else if(jTextField3.getText().trim().equals(""))
+        else if(jLabel19.getText().trim().equals(""))
         {
             JOptionPane.showMessageDialog(null,"Quantity can't be empty","Error: Invalid input",JOptionPane.ERROR_MESSAGE);
-            jTextField3.requestFocus();
+            jLabel19.requestFocus();
         }
         else
         {
@@ -1268,7 +1347,7 @@ public class CustomerList extends javax.swing.JFrame {
             newcode=jTextField1.getText().toUpperCase();
         newtype=jComboBox2.getSelectedItem().toString().toLowerCase();
         newname=jTextField2.getText();
-        newquantity=jTextField3.getText();
+        newquantity=jLabel19.getText();
         newplace=jTextField4.getText().toUpperCase();
         LoginPage.datop.updateCustomer(username,ogcode,ogname,newcode,newname.toUpperCase(),newquantity,newplace,type,newtype);
         jDialog1.setVisible(false);
@@ -1457,6 +1536,7 @@ public class CustomerList extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1469,7 +1549,6 @@ public class CustomerList extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 }

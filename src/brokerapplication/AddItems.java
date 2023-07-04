@@ -423,7 +423,7 @@ public class AddItems extends javax.swing.JFrame {
         String t=jTextField1.getText().trim().toUpperCase();
         if(t.equals(""))
             t=null;
-        itemlist.add(new Item(t,jTextField2.getText().toUpperCase()));
+        itemlist.add(new Item(t,jTextField2.getText().trim().toUpperCase()));
         for(int i=0;i<count;i++)
         {
             String temp=codes[i].getText().trim().toUpperCase();
