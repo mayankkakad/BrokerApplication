@@ -956,7 +956,7 @@ public class DatabaseOperations {
             
             try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e) {e.printStackTrace();}
             st = conn.createStatement();
-            st.executeUpdate("Update `transactions` set `buyer_code`=TRIM(`buyer_code`), `buyer_name`=TRIM(`seller_name`), `seller_code`=TRIM(`seller_code`), `seller_name`=TRIM(`seller_name`);");
+            st.executeUpdate("Update `transactions` set `buyer_code`=TRIM(`buyer_code`), `buyer_name`=TRIM(`buyer_name`), `seller_code`=TRIM(`seller_code`), `seller_name`=TRIM(`seller_name`);");
             try{conn.close();}catch(Exception e){e.printStackTrace();}
         }
         catch(Exception e) {
