@@ -171,7 +171,7 @@ public class DatabaseOperations {
                 if(rs.next())
                     continue;
                 st=conn.createStatement();
-                String query="insert into `sellerdata` values("+(count++)+",\""+LoginPage.loggedInUser+"\",\""+sellerlist.get(i).code+"\",\""+sellerlist.get(i).name+"\","+sellerlist.get(i).quantity+",\""+sellerplacelist.get(i)+"\");";
+                String query="insert into `sellerdata` values("+(count++)+",\""+LoginPage.loggedInUser+"\",\""+sellerlist.get(i).code.trim()+"\",\""+sellerlist.get(i).name.trim()+"\","+sellerlist.get(i).quantity+",\""+sellerplacelist.get(i)+"\");";
                 st.executeUpdate(query);
             }
             success=true;
@@ -198,7 +198,7 @@ public class DatabaseOperations {
                 if(rs.next())
                     continue;
                 Statement st1=conn.createStatement();
-                st1.executeUpdate("insert into `buyerdata` values("+count+",\""+LoginPage.loggedInUser+"\",\""+buyerlist.get(i).code+"\",\""+buyerlist.get(i).name+"\","+buyerlist.get(i).quantity+",\""+buyerplacelist.get(i)+"\");");
+                st1.executeUpdate("insert into `buyerdata` values("+count+",\""+LoginPage.loggedInUser+"\",\""+buyerlist.get(i).code.trim()+"\",\""+buyerlist.get(i).name.trim()+"\","+buyerlist.get(i).quantity+",\""+buyerplacelist.get(i)+"\");");
             }
             success=true;
         }
@@ -264,10 +264,14 @@ public class DatabaseOperations {
             st=conn.createStatement();
             if(newtype.equals(type))
             {
-                if(type.equals("seller"))
+                if(type.equals("seller")) {
                     st.executeUpdate("update `sellerdata` set `seller_code`=\""+newcode+"\",`seller_name`=\""+newname+"\",`quantity`="+Integer.parseInt(newquantity)+",`place`=\""+newplace+"\" where `username`=\""+username+"\" and `seller_code`=\""+ogcode+"\" and `seller_name`=\""+ogname+"\";");
-                else
+                    st.executeUpdate("update `transactions` set `seller_code`=\""+newcode+"\", `seller_name`=\""+newname+"\" where `seller_code`=\""+ogcode+"\" and `seller_name`=\""+ogname+"\";");
+                }
+                else {
                     st.executeUpdate("update `buyerdata` set `buyer_code`=\""+newcode+"\",`buyer_name`=\""+newname+"\",`quantity`="+Integer.parseInt(newquantity)+",`place`=\""+newplace+"\" where `username`=\""+username+"\" and `buyer_code`=\""+ogcode+"\" and `buyer_name`=\""+ogname+"\";");
+                    st.executeUpdate("update `transactions` set `buyer_code`=\""+newcode+"\", `buyer_name`=\""+newname+"\" where `buyer_code`=\""+ogcode+"\" and `buyer_name`=\""+ogname+"\";");
+                }
             }
             else
             {
@@ -279,7 +283,7 @@ public class DatabaseOperations {
                     rs.next();
                     int count=rs.getInt("total")+1;
                     st=conn.createStatement();
-                    st.executeUpdate("insert into `buyerdata` values("+count+",\""+username+"\",\""+newcode+"\",\""+newname+"\","+newquantity+",\""+newplace+"\");");
+                    st.executeUpdate("insert into `buyerdata` values("+count+",\""+username+"\",\""+newcode.trim()+"\",\""+newname.trim()+"\","+newquantity+",\""+newplace+"\");");
                 }
                 else
                 {
@@ -289,7 +293,7 @@ public class DatabaseOperations {
                     rs.next();
                     int count=rs.getInt("total")+1;
                     st=conn.createStatement();
-                    st.executeUpdate("insert into `sellerdata` values("+count+",\""+username+"\",\""+newcode+"\",\""+newname+"\","+newquantity+",\""+newplace+"\");");
+                    st.executeUpdate("insert into `sellerdata` values("+count+",\""+username+"\",\""+newcode.trim()+"\",\""+newname.trim()+"\","+newquantity+",\""+newplace+"\");");
                 }
             }
         }
@@ -405,7 +409,7 @@ public class DatabaseOperations {
                     bcode=rs.getString("buyer_code");
                 }
                 st=conn.createStatement();
-                st.executeUpdate("insert into `transactions` values(\""+date+"\",\""+time+"\",\""+LoginPage.loggedInUser+"\",\""+scode+"\",\""+mainseller.name+"\",\""+bcode+"\",\""+finalbuyerlist.get(i).name+"\",\""+items.get(i)+"\",\""+finalbuyerlist.get(i).quantity+"\","+Integer.parseInt(rate.get(i))+");");
+                st.executeUpdate("insert into `transactions` values(\""+date+"\",\""+time+"\",\""+LoginPage.loggedInUser+"\",\""+scode.trim()+"\",\""+mainseller.name.trim()+"\",\""+bcode.trim()+"\",\""+finalbuyerlist.get(i).name.trim()+"\",\""+items.get(i)+"\",\""+finalbuyerlist.get(i).quantity+"\","+Integer.parseInt(rate.get(i))+");");
                 st=conn.createStatement();
                 st.executeUpdate("update `buyerdata` set `quantity`=`quantity`+"+finalbuyerlist.get(i).quantity+" where `username`=\""+LoginPage.loggedInUser+"\" and `buyer_code`=\""+bcode+"\" and `buyer_name`=\""+finalbuyerlist.get(i).name+"\";");
                 total=total+finalbuyerlist.get(i).quantity;
@@ -460,7 +464,7 @@ public class DatabaseOperations {
                     scode=rs.getString("seller_code");
                 }
                 st=conn.createStatement();
-                st.executeUpdate("insert into `transactions` values(\""+date+"\",\""+time+"\",\""+LoginPage.loggedInUser+"\",\""+scode+"\",\""+finalsellerlist.get(i).name+"\",\""+bcode+"\",\""+mainbuyer.name+"\",\""+items.get(i)+"\",\""+finalsellerlist.get(i).quantity+"\","+Integer.parseInt(rate.get(i))+");");
+                st.executeUpdate("insert into `transactions` values(\""+date+"\",\""+time+"\",\""+LoginPage.loggedInUser+"\",\""+scode.trim()+"\",\""+finalsellerlist.get(i).name.trim()+"\",\""+bcode.trim()+"\",\""+mainbuyer.name.trim()+"\",\""+items.get(i)+"\",\""+finalsellerlist.get(i).quantity+"\","+Integer.parseInt(rate.get(i))+");");
                 st=conn.createStatement();
                 st.executeUpdate("update `sellerdata` set `quantity`=`quantity`+"+finalsellerlist.get(i).quantity+" where `username`=\""+LoginPage.loggedInUser+"\" and `seller_code`=\""+scode+"\" and `seller_name`=\""+finalsellerlist.get(i).name+"\";");
                 total=total+finalsellerlist.get(i).quantity;
@@ -502,7 +506,7 @@ public class DatabaseOperations {
             }
             else
             {
-                rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `date`=\""+date+"\";");
+                rs=st.executeQuery("select * from `transactions` where `username`=\""+LoginPage.loggedInUser+"\" and `date`=\""+date+"\"");
                 while(rs.next())
                     transactions.add(new Transaction(rs.getString("date"),rs.getString("time"),rs.getString("seller_code"),rs.getString("seller_name"),rs.getString("buyer_code"),rs.getString("buyer_name"),rs.getString("item"),rs.getInt("quantity"),rs.getInt("rate")));
             }
@@ -938,7 +942,30 @@ public class DatabaseOperations {
         return transactions;
     }
     
+    public void trimNamesAndCodes() {
+        try {
+            try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e) {e.printStackTrace();}
+            st = conn.createStatement();
+            st.executeUpdate("Update `sellerdata` set `seller_code`=TRIM(`seller_code`), `seller_name`=TRIM(`seller_name`);");
+            try{conn.close();}catch(Exception e){e.printStackTrace();}
+            
+            try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e) {e.printStackTrace();}
+            st = conn.createStatement();
+            st.executeUpdate("Update `buyerdata` set `buyer_code`=TRIM(`buyer_code`), `buyer_name`=TRIM(`buyer_name`);");
+            try{conn.close();}catch(Exception e){e.printStackTrace();}
+            
+            try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e) {e.printStackTrace();}
+            st = conn.createStatement();
+            st.executeUpdate("Update `transactions` set `buyer_code`=TRIM(`buyer_code`), `buyer_name`=TRIM(`seller_name`), `seller_code`=TRIM(`seller_code`), `seller_name`=TRIM(`seller_name`);");
+            try{conn.close();}catch(Exception e){e.printStackTrace();}
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     public void filterDatabase() {
+        trimNamesAndCodes();
         try
         {
             try{conn=DriverManager.getConnection("jdbc:sqlite:brokerdatabase.db");}catch(Exception e){e.printStackTrace();}

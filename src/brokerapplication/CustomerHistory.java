@@ -16,6 +16,8 @@ import java.math.BigInteger;
 import java.sql.DriverManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -471,6 +473,32 @@ public class CustomerHistory extends javax.swing.JFrame {
         if(jComboBox1.getSelectedIndex()==0)
         {
             transactions=LoginPage.datop.getSellerWiseTransactions(jTextField1.getText(),jComboBox2.getSelectedItem().toString());
+            Collections.sort(transactions, new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction t1, Transaction t2) {
+                    int d1 = Integer.parseInt(t1.date.substring(0, 2));
+                    int d2 = Integer.parseInt(t2.date.substring(0, 2));
+                    int m1 = Integer.parseInt(t1.date.substring(3, 5));
+                    int m2 = Integer.parseInt(t2.date.substring(3, 5));
+                    int y1 = Integer.parseInt(t1.date.substring(6, 9));
+                    int y2 = Integer.parseInt(t2.date.substring(6, 9));
+                    int hr1 = Integer.parseInt(t1.time.substring(0, 2));
+                    int hr2 = Integer.parseInt(t2.time.substring(0, 2));
+                    int min1 = Integer.parseInt(t1.time.substring(3, 5));
+                    int min2 = Integer.parseInt(t2.time.substring(3, 5));
+                    if(y1 == y2) {
+                        if(m1 == m2) {
+                            if(d1 == d2) {
+                                if(hr1 == hr2) return min2 - min1;
+                                else return hr2 - hr1;
+                            }
+                            else return d2 - d1;
+                        }
+                        else return m2 - m1;
+                    }
+                    else return y2 - y1;
+                }
+            });
             gbc.gridwidth=1;
             int i=0;
             for(i=0;i<transactions.size();i++)

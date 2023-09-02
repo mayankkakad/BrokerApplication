@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.DriverManager;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -45,6 +47,32 @@ public class BrokerHistory extends javax.swing.JFrame {
         for(int i=datesVector.size()-1;i>=0;i--)
             jComboBox1.addItem(datesVector.get(i));
         transactionsToDisplay=LoginPage.datop.getTransactions("all");
+        Collections.sort(transactionsToDisplay, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction t1, Transaction t2) {
+                int d1 = Integer.parseInt(t1.date.substring(0, 2));
+                int d2 = Integer.parseInt(t2.date.substring(0, 2));
+                int m1 = Integer.parseInt(t1.date.substring(3, 5));
+                int m2 = Integer.parseInt(t2.date.substring(3, 5));
+                int y1 = Integer.parseInt(t1.date.substring(6, 9));
+                int y2 = Integer.parseInt(t2.date.substring(6, 9));
+                int hr1 = Integer.parseInt(t1.time.substring(0, 2));
+                int hr2 = Integer.parseInt(t2.time.substring(0, 2));
+                int min1 = Integer.parseInt(t1.time.substring(3, 5));
+                int min2 = Integer.parseInt(t2.time.substring(3, 5));
+                if(y1 == y2) {
+                    if(m1 == m2) {
+                        if(d1 == d2) {
+                            if(hr1 == hr2) return min2 - min1;
+                            else return hr2 - hr1;
+                        }
+                        else return d2 - d1;
+                    }
+                    else return m2 - m1;
+                }
+                else return y2 - y1;
+            }
+        });
         sr_nos=new JLabel[transactionsToDisplay.size()];
         dates=new JLabel[transactionsToDisplay.size()];
         times=new JLabel[transactionsToDisplay.size()];
@@ -623,6 +651,11 @@ public class BrokerHistory extends javax.swing.JFrame {
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
         jComboBox1.setPreferredSize(new java.awt.Dimension(200, 50));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -1043,6 +1076,10 @@ public class BrokerHistory extends javax.swing.JFrame {
         jDialog1.setBounds(xco,yco,jDialog1.getWidth(),jDialog1.getHeight());
         jDialog1.setVisible(true);
     }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
