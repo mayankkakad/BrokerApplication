@@ -10,11 +10,49 @@ import java.security.MessageDigest;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Vector;
+import java.util.Comparator;
 /**
  *
  * @author Mayank Kakad
  */
+
+class Date
+{
+    int dd;
+    int mm;
+    int yyyy;
+    int hrs;
+    int mins;
+    int index;
+    public Date(int index, int dd, int mm, int yyyy, int hrs, int mins)
+    {
+        this.index = index;
+        this.dd = dd;
+        this.mm = mm;
+        this.yyyy = yyyy;
+        this.hrs = hrs;
+        this.mins = mins;
+    }
+}
+
+class SortByDateTime implements Comparator<Date>
+{
+    public int compare(Date d1, Date d2)
+    {
+        if(d1.yyyy != d2.yyyy)
+            return d1.yyyy - d2.yyyy;
+        if(d1.mm != d2.mm)
+            return d1.mm - d2.mm;
+        if(d1.dd != d2.dd)
+            return d1.dd - d2.dd;
+        if(d1.hrs != d2.hrs)
+            return d1.hrs - d2.hrs;
+        return d1.mins - d2.mins;
+    }
+}
+
 public class DatabaseOperations {
     Connection conn;
     Statement st;
@@ -595,7 +633,26 @@ public class DatabaseOperations {
         catch(Exception e){
         e.printStackTrace();}
         try{conn.close();}catch(Exception e){e.printStackTrace();}
-        return transactions;
+        
+        Vector<Date> broken_dates = new Vector<>();
+        for(int i = 0; i < transactions.size(); i++)
+        {
+            String[] ddmmyyyy = new String[3];
+            ddmmyyyy = transactions.get(i).date.split("-");
+            String[] hrsmin = new String[2];
+            hrsmin = transactions.get(i).time.split(":");
+            broken_dates.add(new Date(i, Integer.parseInt(ddmmyyyy[0]), Integer.parseInt(ddmmyyyy[1]), Integer.parseInt(ddmmyyyy[2]), Integer.parseInt(hrsmin[0]), Integer.parseInt(hrsmin[1])));
+        }
+        
+        Collections.sort(broken_dates, new SortByDateTime());
+        
+        Vector<Transaction> sorted_transactions = new Vector<>();
+        for(int i = 0; i < transactions.size(); i++)
+        {
+            sorted_transactions.add(transactions.get(broken_dates.get(i).index));
+        }
+        
+        return sorted_transactions;
     }
     public Vector<Transaction> getBuyerWiseTransactions(String buyer_code,String buyer_name)
     {
@@ -627,7 +684,26 @@ public class DatabaseOperations {
         catch(Exception e){
         e.printStackTrace();}
         try{conn.close();}catch(Exception e){e.printStackTrace();}
-        return transactions;
+        
+        Vector<Date> broken_dates = new Vector<>();
+        for(int i = 0; i < transactions.size(); i++)
+        {
+            String[] ddmmyyyy = new String[3];
+            ddmmyyyy = transactions.get(i).date.split("-");
+            String[] hrsmin = new String[2];
+            hrsmin = transactions.get(i).time.split(":");
+            broken_dates.add(new Date(i, Integer.parseInt(ddmmyyyy[0]), Integer.parseInt(ddmmyyyy[1]), Integer.parseInt(ddmmyyyy[2]), Integer.parseInt(hrsmin[0]), Integer.parseInt(hrsmin[1])));
+        }
+        
+        Collections.sort(broken_dates, new SortByDateTime());
+        Vector<Transaction> sorted_transactions = new Vector<>();
+        for(int i = 0; i < transactions.size(); i++)
+        {
+            sorted_transactions.add(transactions.get(broken_dates.get(i).index));
+        }
+        
+        return sorted_transactions;
+//        return transactions;
     }
     public void billFormat(String left,String right,String broker_name,String broker_address,String bill_title,String bill_period)
     {

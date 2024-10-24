@@ -28,6 +28,8 @@ import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
 
 /**
  *
@@ -709,14 +711,15 @@ public class CustomerHistory extends javax.swing.JFrame {
                 jComboBox2.requestFocus();
                 return;
             }
+            
+            
             Bill b=LoginPage.datop.getBillFormat();
             if(b==null)
             {
                 JOptionPane.showMessageDialog(null,"Bill Format not yet set","Error: invalid input",JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            String leftlines[]=b.left.split("\n");
-            String rightlines[]=b.right.split("\n");
+
             String filename;
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd_MM_yyyy HH_mm_ss");  
             LocalDateTime now = LocalDateTime.now();
@@ -724,66 +727,112 @@ public class CustomerHistory extends javax.swing.JFrame {
             File file=new File(LoginPage.loggedInUser+" Customer History");
             file.mkdir();
             filename=LoginPage.loggedInUser+" Customer History\\"+jComboBox2.getSelectedItem().toString().trim()+" "+datetime+".docx";
+            String leftheader = b.left.substring(b.left.indexOf(";;@@##$$") + 8);
+            String leftmain = b.left.substring(0, b.left.indexOf(";;@@##$$"));
+            String rightheader = b.right.substring(b.right.indexOf(";;@@##$$") + 8);
+            String rightmain = b.right.substring(0, b.right.indexOf(";;@@##$$"));
+            String leftlines[]=leftmain.split("\n");
+            String rightlines[]=rightmain.split("\n");
             XWPFDocument doc=new XWPFDocument();
+            CTSectPr sectPr = doc.getDocument().getBody().addNewSectPr();
+            CTPageMar pageMar = sectPr.addNewPgMar();
+            pageMar.setLeft(BigInteger.valueOf(100));
+            pageMar.setRight(BigInteger.valueOf(100));
+            pageMar.setTop(BigInteger.valueOf(300));
+            pageMar.setBottom(BigInteger.valueOf(100));
+            XWPFTable headerTable = doc.createTable();
+            headerTable.setTopBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            headerTable.setLeftBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            headerTable.setRightBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            headerTable.setBottomBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            headerTable.setInsideVBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            headerTable.setInsideHBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            XWPFTableRow headrow = headerTable.getRow(0);
+            headrow.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+            headrow.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+            headrow.getCell(0).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+            headrow.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+            headrow.getCell(1).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+            headrow.getCell(1).getParagraphs().get(0).setAlignment(ParagraphAlignment.RIGHT);
+            XWPFRun leftheadertext = headrow.getCell(0).getParagraphs().get(0).createRun();
+            XWPFRun rightheadertext = headrow.getCell(1).getParagraphs().get(0).createRun();
+            leftheadertext.setFontFamily("Calibri");
+            leftheadertext.setFontSize(8);
+            leftheadertext.setText(leftheader);
+            rightheadertext.setFontFamily("Calibri");
+            rightheadertext.setFontSize(8);
+            rightheadertext.setText(rightheader);
             FileOutputStream fos=new FileOutputStream(new File(filename));
-            XWPFParagraph para1=doc.createParagraph();
-            para1.setAlignment(ParagraphAlignment.CENTER);
-            int tempVariable=Integer.MAX_VALUE;
-            for(int i=0;i<leftlines.length&&i<rightlines.length;i++)
-            {
-                XWPFRun left=para1.createRun();
-                left.setFontFamily("Calibri");
-                left.setFontSize(14);
-                left.setText(leftlines[i]+"\t\t\t\t\t\t\t");
-                XWPFRun right=para1.createRun();
-                right.setFontFamily("Calibri");
-                right.setFontSize(14);
-                right.setText(rightlines[i]);
-                right.addBreak();
-                tempVariable=i+1;
+            XWPFTable addresstable=doc.createTable();
+            addresstable.setTopBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            addresstable.setLeftBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            addresstable.setRightBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            addresstable.setBottomBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            addresstable.setInsideVBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            addresstable.setInsideHBorder(XWPFTable.XWPFBorderType.NONE, 0, 0, "");
+            XWPFTableRow addrow1=addresstable.getRow(0);
+            addrow1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+            addrow1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+            XWPFRun[] leftcell = new XWPFRun[leftlines.length];
+            addrow1.getCell(0).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+            addrow1.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.LEFT);
+            for(int j = 0; j < leftlines.length; j++) {
+                leftcell[j]=addrow1.getCell(0).getParagraphs().get(0).createRun();
+                leftcell[j].setFontFamily("Calibri");
+                leftcell[j].setFontSize(12);
+                leftcell[j].setText(leftlines[j]);
+                if(j != leftlines.length - 1)
+                    leftcell[j].addBreak();
             }
-            for(int i=tempVariable;i<leftlines.length;i++)
-            {
-                XWPFRun left=para1.createRun();
-                left.setFontFamily("Calibri");
-                left.setFontSize(14);
-                left.setText(leftlines[i]+"\t\t\t\t\t\t\t\t\t");
-                left.addBreak();
+            addrow1.getCell(1).setVerticalAlignment(XWPFTableCell.XWPFVertAlign.TOP);
+            addrow1.getCell(1).getParagraphs().get(0).setAlignment(ParagraphAlignment.RIGHT);
+            XWPFRun[] rightcell = new XWPFRun[rightlines.length];
+            for(int j = 0; j < rightlines.length; j++) {
+                rightcell[j]=addrow1.getCell(1).getParagraphs().get(0).createRun();
+                rightcell[j].setFontFamily("Calibri");
+                rightcell[j].setFontSize(12);
+                rightcell[j].setText(rightlines[j]);
+                if(j != rightlines.length - 1)
+                    rightcell[j].addBreak();
             }
-            for(int i=tempVariable;i<rightlines.length;i++)
-            {
-                XWPFRun right=para1.createRun();
-                right.setFontFamily("Calibri");
-                right.setFontSize(14);
-                right.setText("\t\t\t\t\t\t\t\t"+rightlines[i]);
-                right.addBreak();
-            }
+            int ind = b.broker_name.length();
+            if(b.broker_name.contains(";;@@##$$"))
+                ind = b.broker_name.indexOf(";;@@##$$");
+            String bname = b.broker_name.substring(0, ind);
+            if(ind == b.broker_name.length())
+                ind -= 8;
+            String bsubname = b.broker_name.substring(ind+8);
             XWPFParagraph para2=doc.createParagraph();
             para2.setAlignment(ParagraphAlignment.CENTER);
             XWPFRun name=para2.createRun();
             name.setFontFamily("Calibri");
             name.setBold(true);
-            name.setFontSize(18);
-            name.setText(b.broker_name);
+            name.setFontSize(16);
+            name.setText(bname);
             name.addBreak();
+            XWPFRun subname=para2.createRun();
+            subname.setFontFamily("Calibri");
+            subname.setBold(true);
+            subname.setFontSize(12);
+            subname.setText(bsubname);
+            subname.addBreak();
             XWPFRun address=para2.createRun();
             address.setFontFamily("Calibri");
-            address.setFontSize(14);
+            address.setFontSize(12);
             address.setText(b.broker_address);
-            address.addBreak();
             XWPFParagraph para3=doc.createParagraph();
             para3.setAlignment(ParagraphAlignment.CENTER);
             XWPFRun title=para3.createRun();
             title.setFontFamily("Calibri");
-            title.setFontSize(16);
+            title.setFontSize(14);
             title.setBold(true);
             title.setText(b.bill_title);
             title.addBreak();
             XWPFRun period=para3.createRun();
             period.setFontFamily("Calibri");
-            period.setFontSize(14);
+            period.setFontSize(12);
             period.setText(b.bill_period);
-            period.addBreak();
+            
             if(jComboBox1.getSelectedIndex()==0)
             {
                 temp=LoginPage.datop.getSellerWiseTransactions(jTextField1.getText(),jComboBox2.getSelectedItem().toString());
@@ -802,11 +851,11 @@ public class CustomerHistory extends javax.swing.JFrame {
                 mySecondRun.setText(LoginPage.datop.getSellerPlace(temp.get(0).seller_code,temp.get(0).seller_name));
                 XWPFTable table=doc.createTable();
                 XWPFTableRow row1=table.getRow(0);
-                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(5000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
+                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1750));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1850));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
                 XWPFRun rowcell[]=new XWPFRun[5];
                 for(int i=0;i<rowcell.length;i++)
                 {
@@ -881,11 +930,11 @@ public class CustomerHistory extends javax.swing.JFrame {
                 mySecondRun.setText(LoginPage.datop.getBuyerPlace(temp.get(0).buyer_code,temp.get(0).buyer_name));
                 XWPFTable table=doc.createTable();
                 XWPFTableRow row1=table.getRow(0);
-                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1500));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(5000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1600));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
-                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
+                row1.getCell(0).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1750));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(6000));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1850));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
+                row1.addNewTableCell().getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1250));
                 XWPFRun rowcell[]=new XWPFRun[5];
                 for(int i=0;i<rowcell.length;i++)
                 {
